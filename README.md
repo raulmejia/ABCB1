@@ -1,2 +1,3 @@
 # ABCB1
-Reproducible_Code_for_ABCB1_analysis
+
+This repository store the code for the ABCB1 project
