@@ -29,5 +29,5 @@ splitdf_by_gene_level_in_tumours <- function(df, healthy_positions, tumour_posit
   df_Health <- df[,healthy_positions]
   df_Tumour <- df[,tumour_positions]
   list_of_splited_df_Tumour_by_thisgene_levels <- Split_by_thisgene_level(df_Tumour,mygene)
-  list_of_splited_df_by_thisgene_levels <- merge_with_healthem(list_of_splited_df_Tumour_by_thisgene_levels, TCGAem_Health)
+  list_of_splited_df_by_thisgene_levels <- merge_with_healthem(list_of_splited_df_Tumour_by_thisgene_levels, df_Health)
 }

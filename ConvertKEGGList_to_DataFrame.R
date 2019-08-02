@@ -4,16 +4,16 @@ list_of_chr_to_df<-function(X){
   mymax<-max(unlist(lapply(X,length)))
   Num_pathways<-length(lapply(X,length))
   mylist<-list()
-    for(k in 1:Num_pathways){
-      N_faltantes<-mymax-length(X[[k]])
-      mylist[[k]]<-c(X[[k]],rep("NA",N_faltantes))
-    }
-      names(mylist)<-names(X)
-      dd<-data.frame(matrix(nrow=Num_pathways,ncol=mymax))
-      for(i in 1:length(mylist)){
-        dd[i,] <- mylist[[i]]
-      }
-      rownames(dd)<-names(mylist)
+  for(k in 1:Num_pathways){
+    N_faltantes<-mymax-length(X[[k]])
+    mylist[[k]]<-c(X[[k]],rep("NA",N_faltantes))
+  }
+  names(mylist)<-names(X)
+  dd<-data.frame(matrix(nrow=Num_pathways,ncol=mymax))
+  for(i in 1:length(mylist)){
+    dd[i,] <- mylist[[i]]
+  }
+  rownames(dd)<-names(mylist)
   return(dd)
 }
 # Examples of use

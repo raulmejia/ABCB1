@@ -22,6 +22,21 @@ if (!require("plotly")) {
   install.packages("plotly", ask =FALSE)
   library(plotly)
 }
+source("http://bioconductor.org/biocLite.R")
+if (!require("gage")) {
+  biocLite("gage", ask =FALSE)
+  library(gage)
+}
+if (!require("KEGGREST")) {
+  source("http://bioconductor.org/biocLite.R")
+  biocLite("KEGGREST", ask =FALSE)
+  library("KEGGREST")
+}
+if (!require("stringr")) {
+  install.packages("stringr", ask =FALSE)
+  library("stringr")
+}
+
 
 results_path <-c("/media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/")
 
@@ -112,24 +127,71 @@ p5
 ##### Spliting by one gene expression level
 
 source("/media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/splitdf_by_gene_level_in_tumours.R")
+source("/media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/ConvertKEGGList_to_DataFrame.R")
 # let's split our data frame acoording to the levels of ABCB1, 
 # we will build subdata frames, that only keep tumours with a ABCB1 expression level above the mean , under the mean , and so on...
 list_TCGA_splited_by_ABCB1_levels_in_tumours <- splitdf_by_gene_level_in_tumours(TCGAem, 1:112, 113:920, "ABCB1")
+
 names(list_TCGA_splited_by_ABCB1_levels_in_tumours)
 lapply(list_TCGA_splited_by_ABCB1_levels_in_tumours,dim) # let's check
 list_TCGA_splited_by_ABCB1_levels_in_tumours[[1]][1:5,1:5]
 
-for(  k in 1: length(list_TCGA_splited_by_ABCB1_levels_in_tumours)){
-  write.table(list_TCGA_splited_by_ABCB1_levels_in_tumours[[1]]  ,
-              file=paste0(results_path,names(list_TCGA_splited_by_ABCB1_levels_in_tumours)[k],".tsv" ),
+list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators <- list_TCGA_splited_by_ABCB1_levels_in_tumours
+list_TCGA_splited_by_ABCB1_levels_in_tumours[[1]][1:5,1:5]
+list_TCGA_splited_by_ABCB1_levels_in_tumours[[2]][1:5,1:5]
+list_TCGA_splited_by_ABCB1_levels_in_tumours[[3]][1:5,1:5]
+list_TCGA_splited_by_ABCB1_levels_in_tumours[[4]][1:5,1:5]
+
+list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators[[1]][1:5,1:5]
+for(  k in 1:length(list_TCGA_splited_by_ABCB1_levels_in_tumours) ){
+  indicator_row<-c(rep(1,112),rep(0,dim(list_TCGA_splited_by_ABCB1_levels_in_tumours[[k]])[2] - 112))
+  list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators[[k]]<-rbind(indicator_row, list_TCGA_splited_by_ABCB1_levels_in_tumours[[k]])
+  #list_TCGA_splited_by_ABCB1_levels_in_tumours[[1]][1:5,1:5]
+  rownames(list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators[[k]])[1]<- "NORMAL"
+}
+
+for(  k in 1: length(list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators)){
+  write.table(list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators[[k]]  ,
+              file=paste0(results_path,names(list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators)[k],".tsv" ),
               sep="\t", quote=FALSE , row.names= TRUE, col.names= TRUE  )    
 }
 
-
 ## Now pathifier
+#ext 1152 Jorge alvarado
+
+# First updating KEGG
+library(gage)
+kegg_gsets <-kegg.gsets(species = "hsa", id.type = "kegg") # Downloading the most recent keggdb
+source("/media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/ConvertKEGGList_to_DataFrame.R")
+KEGG_pathways_in_df <-list_of_chr_to_df(kegg_gsets$kg.sets)
+
+# Translating the kgid to genesymbols
+Kegghsa <- keggList("hsa")
+GeneSymbol_kid <- str_extract(Kegghsa, "[:alnum:]+")
+names(GeneSymbol_kid) <- gsub("hsa:","",names(Kegghsa))
+kegg_sets_kid_gs <- kegg_gsets$kg.sets
+for( w in 1:length(kegg_gsets$kg.sets) ){
+  kegg_sets_kid_gs[[ names(kegg_gsets$kg.sets)[w] ]] <- GeneSymbol_kid[which(  names(GeneSymbol_kid) %in%  kegg_gsets$kg.sets[[ names(kegg_gsets$kg.sets)[w]   ]])]
+}
+kegg_sets_kid_gs <- lapply(kegg_sets_kid_gs,unique)
+KEGG_pathways_in_df_genesymbols<-list_of_chr_to_df( kegg_sets_kid_gs)
+
+write.table(KEGG_pathways_in_df_genesymbols, file=paste0(results_path,"KEGG_pathways_in_df_genesymbol.tsv") ,sep="\t",col.names = FALSE,quote = FALSE)
+write.table(KEGG_pathways_in_df, file=paste0(results_path,"KEGG_pathways_in_df_in_keggids.tsv") ,sep="\t",col.names = FALSE,quote = FALSE)
+save(KEGG_pathways_in_df_genesymbols,file=paste0(results_path,"KEGG_pathways_in_df_in_genesymbols.RData"))
+save(KEGG_pathways_in_df,file=paste0(results_path,"KEGG_pathways_in_df.RData"))
+
+
+paste0(results_path,"low",".tsv" )
 
 # go to script
-system(" " )
+system("Rscript /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/Pathifier_Args_100stabilizing_Filtervalue3_75.R /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/low.tsv /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/KEGG_pathways_in_df_genesymbol.tsv /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/ /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/ All_subtypes" )
+system("Rscript /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/Pathifier_Args_100stabilizing_Filtervalue3_75.R /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/25th_top_low.tsv /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/KEGG_pathways_in_df_genesymbol.tsv /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/ /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/ All_subtypes_low_ABCB1" )
+system("Rscript /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/Pathifier_Args_100stabilizing_Filtervalue3_75.R /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/25th_top_high.tsv /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/KEGG_pathways_in_df_genesymbol.tsv /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/ /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/ All_subtypes_highp25_ABCB1" )
+
+
+Rscript /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/Pathifier_Args_100stabilizing_Filtervalue3_75.R /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/25th_top_low.tsv /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/KEGG_pathways_in_df_genesymbol.tsv /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/ /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/ All_subtypes_low_ABCB1
+paste0(results_path,"low",".tsv" )
 
 p <- ggplot(meltedABC, aes(Expression_Value)) + geom_density(alpha = 0.2)
 p

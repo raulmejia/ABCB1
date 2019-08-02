@@ -1,0 +1,9 @@
+robust_score_bydist. min_exp= 3.75 , min_std= 0.2898105 
+pathway  119 > sig: 0.06336951 
+pathway  7 > sig: 0.1477736 
+pathway  1 > sig: 0.2603743 
+pathway  8 > sig: 0.0359367 
+pathway  9 > sig: 0.03642446 
+pathway  10 > sig: 0.02126158 
+skipping pathway  11  k1= 2 
+pathway  12 > sig: 0.02884646 
