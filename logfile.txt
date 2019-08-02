@@ -7,3 +7,7 @@ pathway  9 > sig: 0.03642446
 pathway  10 > sig: 0.02126158 
 skipping pathway  11  k1= 2 
 pathway  12 > sig: 0.02884646 
+pathway  119  k= 12 ( 12 ) wj= 2 >new sig: 0.03036564 | accepted!
+pathway  120 > sig: 0.07452625 
+pathway  120  k= 14 ( 14 ) wj= 3 >new sig: 0.07510665 x rejected
+pathway  121 > sig: 0.03592015 
