@@ -23,6 +23,7 @@ if (!require("plotly")) {
   library(plotly)
 }
 
+results_path <-c("/media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/")
 
 #args = commandArgs(trailingOnly=TRUE)
 #df_path <-args[1]
@@ -108,16 +109,28 @@ p5
 # p2 contiene un ABCB algo muy interesante
 # p1 falta análisis
 
-##### Extracting the more 
+##### Spliting by one gene expression level
 
 source("/media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/splitdf_by_gene_level_in_tumours.R")
 # let's split our data frame acoording to the levels of ABCB1, 
 # we will build subdata frames, that only keep tumours with a ABCB1 expression level above the mean , under the mean , and so on...
 list_TCGA_splited_by_ABCB1_levels_in_tumours <- splitdf_by_gene_level_in_tumours(TCGAem, 1:112, 113:920, "ABCB1")
-
+names(list_TCGA_splited_by_ABCB1_levels_in_tumours)
 lapply(list_TCGA_splited_by_ABCB1_levels_in_tumours,dim) # let's check
 list_TCGA_splited_by_ABCB1_levels_in_tumours[[1]][1:5,1:5]
 
+for(  k in 1: length(list_TCGA_splited_by_ABCB1_levels_in_tumours)){
+  write.table(list_TCGA_splited_by_ABCB1_levels_in_tumours[[1]]  ,
+              file=paste0(results_path,names(list_TCGA_splited_by_ABCB1_levels_in_tumours)[k],".tsv" ),
+              sep="\t", quote=FALSE , row.names= TRUE, col.names= TRUE  )    
+}
+
+
 ## Now pathifier
 
+# go to script
+system(" " )
 
+p <- ggplot(meltedABC, aes(Expression_Value)) + geom_density(alpha = 0.2)
+p
+# 3.75
