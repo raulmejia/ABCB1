@@ -108,36 +108,6 @@ p5
 # p2 contiene un ABCB algo muy interesante
 # p1 falta análisis
 
-ABCemtumours <- ABCem[,113:920]
-meltedABCt<- melt(t(ABCemtumours))
-head(meltedABCt,n=5)
-meltedABCt[910:930,]
-
-meltedABClog2tum<-meltedABCt
-meltedABClog2tum[,"Expression_Value"]<- log2(meltedABClog2tum[,"Expression_Value"] +1)
-
-p1 <- ggplot(meltedABClog2tum[1:(10*920),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
-p1
-p2 <- ggplot(meltedABClog2tum[((10*920)+1):(20*920),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
-p2
-pB1 <- ggplot(meltedABClog2tum[((13*920)+1):(18*920),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
-pB1
-pB1 <- ggplot(meltedABClog2tum[((13*920)+1):(18*920),], aes(y=Expression_Value, fill = Gene)) + geom_boxplot(alpha = 0.2)
-pB1
-pB1 <- ggplot(meltedABClog2tum[((13*920)+1):(18*920),], aes(y=Expression_Value, x = Gene)) + geom_violin(alpha = 0.2)
-pB1
-pB1 + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.1, binwidth = 0.1)
-
-p3 <- ggplot(meltedABClog2tum[((20*920)+1):(30*920),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
-p3
-p4 <- ggplot(meltedABClog2tum[((30*920)+1):(40*920),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
-p4
-p4 <- ggplot(meltedABClog2tum[((32*920)+1):(34*920),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
-p4
-# Interesante ABCC6 y ABCC6P1 tienen distribuciones bimodales, que pacientes seran?
-p5 <- ggplot(meltedABClog2tum[((47*920)+1):(49*920),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
-p5
-
 ##### Extracting the more 
 
 source("/media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/splitdf_by_gene_level_in_tumours.R")
