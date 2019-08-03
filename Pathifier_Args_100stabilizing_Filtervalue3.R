@@ -20,7 +20,7 @@ Tumour_subtype<-args[5]
 #Tumour_subtype<-"Normal"
 
 # Filter low value genes 
-Filter_value=3.75
+Filter_value=3
 
 ###############################################################################
 ### Installing and/or loading required packages

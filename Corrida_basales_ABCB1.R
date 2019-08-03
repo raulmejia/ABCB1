@@ -39,16 +39,22 @@ if (!require("stringr")) {
   library("stringr")
 }
 
+#Labels_Controls_and_Normal_separated_TCGA.txt
+
+
 setwd("~/Documentos/ABCB1/ABCB1_code/")
-results_path <-c("../Results/")
-TCGAem_file_path <-c("../Data/expMatrix_TCGA_cBioPortal_no_males.txt")
+dir.create("../Results/Basal")
+results_path <-c("../Results/Basal/")
+TCGAem_file_path <-c("../Data/Control_and_ Basal_with_indicator.txt")
 #args = commandArgs(trailingOnly=TRUE)
 #df_path <-args[1]
 
-TCGAem <-read.table(file=TCGAem_file_path, sep="\t", quote = "", stringsAsFactors = FALSE)
+TCGAem_plus_indicator <-read.table(file=TCGAem_file_path, sep="\t", quote = "", stringsAsFactors = FALSE)
+Indicator_Row <-TCGAem_plus_indicator[1,]
+TCGAem <- TCGAem_plus_indicator[-1,]
 TCGAem <- log(TCGAem + 1)
-
 ABCem <-TCGAem[grep("ABC",rownames(TCGAem)),]
+TCGAem <- rbind(Indicator_Row,TCGAem)
 
 sum(str_detect( colnames(ABCem) , "\\.01")); colnames(ABCem)[566] ; sum(str_detect( colnames(ABCem) , "\\.11"))
 
@@ -64,59 +70,53 @@ meltedABC$gene_and_condition <- paste0(meltedABC$Gene , meltedABC$health)
 #meltedABClog2[,"Expression_Value"]<- log2(meltedABClog2[,"Expression_Value"] +1)
 
 ## looking for the treshold
-p1 <- ggplot(meltedABC[1:(10*920),], aes(Expression_Value, fill = gene_and_condition)) + geom_density(alpha = 0.2)
+p1 <- ggplot(meltedABC[1:(10*248),], aes(Expression_Value, fill = gene_and_condition)) + geom_density(alpha = 0.2)
 p1
-p2 <- ggplot(meltedABC[((10*920)+1):(20*920),], aes(Expression_Value, fill=gene_and_condition)) + geom_density(alpha = 0.2)
+p2 <- ggplot(meltedABC[((10*248)+1):(20*248),], aes(Expression_Value, fill=gene_and_condition)) + geom_density(alpha = 0.2)
 p2
 
-ggplot(meltedABC[((10*920)+1):(20*920),], aes(x = Gene, y = Expression_Value, fill = health)) +
+ggplot(meltedABC[((10*248)+1):(20*248),], aes(x = Gene, y = Expression_Value, fill = health)) +
   geom_boxplot(outlier.size = 0) +
   geom_point(pch = 21, position = position_jitterdodge())
 
-ggplot(meltedABC[((0*920)+1):(25*920),], aes(x = Gene, y = Expression_Value, fill = health)) +
+ggplot(meltedABC[((0*248)+1):(25*248),], aes(x = Gene, y = Expression_Value, fill = health)) +
   geom_boxplot(outlier.size = 0) +
   geom_point(pch = 21, position = position_jitterdodge())
 
 pdf(paste0(results_path,"ABCB1_boxplot_heallthvsTumours.pdf"), height = 7 , width = 7)
-ggplot(meltedABC[((14*920)+1):(15*920),], aes(x = Gene, y = Expression_Value, fill = health)) +
+ggplot(meltedABC[((14*248)+1):(15*248),], aes(x = Gene, y = Expression_Value, fill = health)) +
   geom_boxplot(outlier.size = 0) +
   geom_point(pch = 21, position = position_jitterdodge())
 dev.off()
 
-
 pdf(paste0(results_path,"ABCB1_boxplot_heallthvsTumours.pdf"), height = 7 , width = 14)
-ggplot(data = meltedABC[((0*920)+1):(20*920),], aes(Gene, Expression_Value)) +
+ggplot(data = meltedABC[((0*248)+1):(20*248),], aes(Gene, Expression_Value)) +
   geom_boxplot(aes(colour = health))
-ggplot(data = meltedABC[((21*920)+1):(40*920),], aes(Gene, Expression_Value)) +
+ggplot(data = meltedABC[((21*248)+1):(40*248),], aes(Gene, Expression_Value)) +
   geom_boxplot(aes(colour = health))
-ggplot(data = meltedABC[((41*920)+1):(50*920),], aes(Gene, Expression_Value)) +
+ggplot(data = meltedABC[((41*248)+1):(50*248),], aes(Gene, Expression_Value)) +
   geom_boxplot(aes(colour = health))
 dev.off()
 
-
-pB1 <- ggplot(meltedABC[((14*920)+1):(15*920),], aes(Expression_Value, fill = gene_and_condition)) + geom_density(alpha = 0.2)
+pB1 <- ggplot(meltedABC[((14*248)+1):(15*248),], aes(Expression_Value, fill = gene_and_condition)) + geom_density(alpha = 0.2)
 pB1
-pB1 <- ggplot(meltedABC[((14*920)+1):(15*920),], aes(y=Expression_Value, fill = gene_and_condition)) + geom_boxplot(alpha = 0.2)
+pB1 <- ggplot(meltedABC[((14*248)+1):(15*248),], aes(y=Expression_Value, fill = gene_and_condition)) + geom_boxplot(alpha = 0.2)
 pB1
-pB1 <- ggplot(meltedABC[((14*920)+1):(15*920),], aes(y=Expression_Value, x = gene_and_condition)) + geom_violin(alpha = 0.2)
+pB1 <- ggplot(meltedABC[((14*248)+1):(15*248),], aes(y=Expression_Value, x = gene_and_condition)) + geom_violin(alpha = 0.2)
 pB1
 pB1 + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.1, binwidth = 0.1)
 
-p3 <- ggplot(meltedABC[((20*920)+1):(30*920),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
+p3 <- ggplot(meltedABC[((20*248)+1):(30*248),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
 p3
-p4 <- ggplot(meltedABC[((30*920)+1):(40*920),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
+p4 <- ggplot(meltedABC[((30*248)+1):(40*248),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
 p4
-p4 <- ggplot(meltedABC[((32*920)+1):(34*920),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
+p4 <- ggplot(meltedABC[((32*248)+1):(34*248),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
 p4
 # Interesante ABCC6 y ABCC6P1 tienen distribuciones bimodales, que pacientes seran?
-p5 <- ggplot(meltedABC[((49*920)+1):(50*920),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
+p5 <- ggplot(meltedABC[((49*248)+1):(50*248),], aes(Expression_Value, fill = Gene)) + geom_density(alpha = 0.2)
 p5
-# La distribucion de ABCG8 tambien esta curiosa (el 50)
-# p5 nada solo unas de piquitos finales
-#p4 interesante dos bimodales y una con un piquito al final
-# p3 con una de un piquito final
-# p2 contiene un ABCB algo muy interesante
-# p1 falta análisis
+# More clear binomial distributions between healthies and tumours
+# End Visualization
 
 ##### Spliting by one gene expression level
 
@@ -124,11 +124,10 @@ source("splitdf_by_gene_level_in_tumours.R")
 source("ConvertKEGGList_to_DataFrame.R")
 # let's split our data frame acoording to the levels of ABCB1, 
 # we will build subdata frames, that only keep tumours with a ABCB1 expression level above the mean , under the mean , and so on...
-list_TCGA_splited_by_ABCB1_levels_in_tumours <- splitdf_by_gene_level_in_tumours(TCGAem, 1:112, 113:920, "ABCB1")
+TCGAem
+list_TCGA_splited_by_ABCB1_levels_in_tumours <- splitdf_by_gene_level_in_tumours(TCGAem, 1:112, 113:248, "ABCB1")
 
-names(list_TCGA_splited_by_ABCB1_levels_in_tumours)
 lapply(list_TCGA_splited_by_ABCB1_levels_in_tumours,dim) # let's check
-list_TCGA_splited_by_ABCB1_levels_in_tumours[[1]][1:5,1:5]
 
 list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators <- list_TCGA_splited_by_ABCB1_levels_in_tumours
 list_TCGA_splited_by_ABCB1_levels_in_tumours[[1]][1:5,1:5]
@@ -136,13 +135,12 @@ list_TCGA_splited_by_ABCB1_levels_in_tumours[[2]][1:5,1:5]
 list_TCGA_splited_by_ABCB1_levels_in_tumours[[3]][1:5,1:5]
 list_TCGA_splited_by_ABCB1_levels_in_tumours[[4]][1:5,1:5]
 
-list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators[[1]][1:5,1:5]
-for(  k in 1:length(list_TCGA_splited_by_ABCB1_levels_in_tumours) ){
-  indicator_row<-c(rep(1,112),rep(0,dim(list_TCGA_splited_by_ABCB1_levels_in_tumours[[k]])[2] - 112))
-  list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators[[k]]<-rbind(indicator_row, list_TCGA_splited_by_ABCB1_levels_in_tumours[[k]])
+#for(  k in 1:length(list_TCGA_splited_by_ABCB1_levels_in_tumours) ){
+  #indicator_row<-c(rep(1,112),rep(0,dim(list_TCGA_splited_by_ABCB1_levels_in_tumours[[k]])[2] - 112))
+  #list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators[[k]]<-rbind(indicator_row, list_TCGA_splited_by_ABCB1_levels_in_tumours[[k]])
   #list_TCGA_splited_by_ABCB1_levels_in_tumours[[1]][1:5,1:5]
-  rownames(list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators[[k]])[1]<- "NORMAL"
-}
+  #rownames(list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators[[k]])[1]<- "NORMAL"
+#}
 
 for(  k in 1: length(list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators)){
   write.table(list_TCGA_splited_by_ABCB1_levels_in_tumours_indicators[[k]]  ,
@@ -174,10 +172,11 @@ write.table(KEGG_pathways_in_df, file=paste0(results_path,"KEGG_pathways_in_df_i
 save(KEGG_pathways_in_df_genesymbols,file=paste0(results_path,"KEGG_pathways_in_df_in_genesymbols.RData"))
 save(KEGG_pathways_in_df,file=paste0(results_path,"KEGG_pathways_in_df.RData"))
 
-paste0(results_path,"low",".tsv" )
+
 
 # go to script
 dir.create( paste0(results_path,"Pathifier/"))
+
 system("Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/25th_top_low.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_under_25_stbl_10" )
 system("Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/low.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_low_ABCB1_stbl_10" )
 system("Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/high.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_high_ABCB1_stbl_10" )
@@ -186,6 +185,15 @@ system("Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/25th_t
 system("Rscript Pathifier_Args_3stabilizing_Filtervalue3_75.R ../Results/25th_top_low.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_under_25_stbl_3" ) # lo más rápido
 # Rscript Pathifier_Args_100stabilizing_Filtervalue3_75.R ../Results/25th_top_low.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_under_25_stbl_100
 # Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/25th_top_low.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_under_25_stbl_10_Filter3
+
+system("Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/Basal/25th_top_low.tsv ../Results/Basal/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Basal/Pathifier/ Basal_under_25_stbl_10_threshold_3" )
+system("Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/Basal/low.tsv ../Results/Basal/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Basal/Pathifier/ Basal_low_ABCB1_stbl_10_threshold_3" )
+system("Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/Basal/high.tsv ../Results/Basal/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Basal/Pathifier/ Basal_high__ABCB1_stbl_10_threshold_3" )
+system("Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/Basal/25th_top_high.tsv ../Results/Basal/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Basal/Pathifier/ Basal_above_75_stbl_10_threshold_3" )
+
+system("Rscript Pathifier_Args_100stabilizing_Filtervalue3.R ../Results/Basal/25th_top_low.tsv ../Results/Basal/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Basal/Pathifier/ Basal_under_25_stbl_100_threshold_3" )
+system("Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/Basal/25th_top_low.tsv ../Results/Basal/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Basal/Pathifier/ Basal_under_25_stbl_10_threshold_3_75")
+
 
 
 # Lo mejorcito

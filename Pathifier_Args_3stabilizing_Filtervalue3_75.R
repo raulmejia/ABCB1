@@ -141,7 +141,7 @@ ptm <- proc.time()
 PDS<-quantify_pathways_deregulation(DATASET$data, DATASET$allgenes,
                                     PATHWAYS$gs,
                                     PATHWAYS$pathwaynames,
-                                    DATASET$normals, attempts = 100,
+                                    DATASET$normals, attempts = 3,
                                     logfile="logfile.txt", min_std = my_min_std, min_exp =my_min_exp)
 
 #Stop the clock

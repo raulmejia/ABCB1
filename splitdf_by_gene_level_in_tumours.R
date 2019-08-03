@@ -1,5 +1,6 @@
 
 Split_by_thisgene_level<- function( mymatrix, gene){
+  # This funtion receives only the matrix of tumours and split it by that gene value 
   mymatrix_25th_top_high <- mymatrix[ , mymatrix[gene,] > quantile(as.matrix(mymatrix[gene,]) , .75) ]
   mymatrix_high <- mymatrix[, mymatrix[gene,] > mean(as.matrix(mymatrix[gene,]))]
   mymatrix_low <- mymatrix[,mymatrix[gene,] < mean(as.matrix( mymatrix[gene,]))]
@@ -10,12 +11,11 @@ Split_by_thisgene_level<- function( mymatrix, gene){
 }
 
 merge_with_healthem <- function(list_splited, healthem){
-  #list_splited <- list_of_splited_TCGAem_Tumour_by_ABCB1_levels
-  #healthem <- TCGAem_Health
-  list_splited[["25th_top_high"]] <- cbind(list_splited[["25th_top_high"]] , healthem )
-  list_splited[["high"]] <- cbind(list_splited[["high"]] , healthem )
-  list_splited[["25th_top_low"]] <- cbind(list_splited[["25th_top_low"]] , healthem )
-  list_splited[["low"]] <- cbind(list_splited[["low"]] , healthem )
+  #This funcion paste the previously splitter tumours with the "Healthies"
+  list_splited[["25th_top_high"]] <- cbind(healthem, list_splited[["25th_top_high"]]  )
+  list_splited[["high"]] <- cbind(healthem, list_splited[["high"]] )
+  list_splited[["25th_top_low"]] <- cbind(healthem, list_splited[["25th_top_low"]] )
+  list_splited[["low"]] <- cbind(healthem, list_splited[["low"]] )
   return(list_splited)
 }
 

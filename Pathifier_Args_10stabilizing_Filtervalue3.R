@@ -20,7 +20,7 @@ Tumour_subtype<-args[5]
 #Tumour_subtype<-"Normal"
 
 # Filter low value genes 
-Filter_value=3.75
+Filter_value=3
 
 ###############################################################################
 ### Installing and/or loading required packages
@@ -141,7 +141,7 @@ ptm <- proc.time()
 PDS<-quantify_pathways_deregulation(DATASET$data, DATASET$allgenes,
                                     PATHWAYS$gs,
                                     PATHWAYS$pathwaynames,
-                                    DATASET$normals, attempts = 100,
+                                    DATASET$normals, attempts = 10,
                                     logfile="logfile.txt", min_std = my_min_std, min_exp =my_min_exp)
 
 #Stop the clock
