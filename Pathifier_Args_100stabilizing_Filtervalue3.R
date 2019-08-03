@@ -152,8 +152,8 @@ PDS_time<-proc.time() - ptm
 
 # Saving data 
 
-write(PDS_time, file = paste(Path_of_Results,c("PDS_time.txt"),sep = ""))
-save.image(file = paste(Path_of_Results,c("PDS.RData"),sep=""))
+write(PDS_time, file = paste(Path_of_Results,Tumour_subtype,c("PDS_time.txt"),sep = ""))
+save.image(file = paste(Path_of_Results,Tumour_subtype,c("PDS.RData"),sep=""))
 
 ###############################################################################
 ####################   Plotting  Raw PDS ######################################
@@ -169,7 +169,7 @@ color_labels_vector<-gsub("0","red",color_labels_vector)
 #load(RData_Directory)
 PDSmatrix <- mapply(FUN = c, PDS$scores)
 PDSmatrix <- t(PDSmatrix)
-
+colnames(PDSmatrix)<- colnames(matrix)
 ###############################################################################
 ## Generating and assigning labels for pathways used in the analysis
 ###############################################################################

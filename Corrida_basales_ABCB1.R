@@ -176,7 +176,7 @@ save(KEGG_pathways_in_df,file=paste0(results_path,"KEGG_pathways_in_df.RData"))
 
 # go to script
 dir.create( paste0(results_path,"Pathifier/"))
-
+# Falta correr estos globales de nuevo porque actualice el script y ahora estoy usando los procesadores con el basal , queda de tare
 system("Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/25th_top_low.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_under_25_stbl_10" )
 system("Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/low.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_low_ABCB1_stbl_10" )
 system("Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/high.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_high_ABCB1_stbl_10" )
@@ -185,7 +185,7 @@ system("Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/25th_t
 system("Rscript Pathifier_Args_3stabilizing_Filtervalue3_75.R ../Results/25th_top_low.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_under_25_stbl_3" ) # lo más rápido
 # Rscript Pathifier_Args_100stabilizing_Filtervalue3_75.R ../Results/25th_top_low.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_under_25_stbl_100
 # Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/25th_top_low.tsv ../Results/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/ All_subtypes_under_25_stbl_10_Filter3
-
+---
 system("Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/Basal/25th_top_low.tsv ../Results/Basal/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Basal/Pathifier/ Basal_under_25_stbl_10_threshold_3" )
 system("Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/Basal/low.tsv ../Results/Basal/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Basal/Pathifier/ Basal_low_ABCB1_stbl_10_threshold_3" )
 system("Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/Basal/high.tsv ../Results/Basal/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Basal/Pathifier/ Basal_high__ABCB1_stbl_10_threshold_3" )

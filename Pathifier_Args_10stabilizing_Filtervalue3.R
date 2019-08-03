@@ -9,14 +9,19 @@ args <- commandArgs(trailingOnly = TRUE)
 
 ###########################################
 Path_to_your_Matrix<-args[1]
+#Path_to_your_Matrix <-c("../Results/Basal/25th_top_low.tsv")
 #Path_to_your_Matrix<-c("/home/rmejia/Documents/Doctorado/ProyectoDoctorado/Pipe_post_IncosistencyPatways/4_Enrichment/Pathifier/RDB/Data/Control_and_Normal_with_indicator.txt")
 gene_sets_path<-args[2]
 #gene_sets_path<-c("/home/rmejia/Documents/Doctorado/ProyectoDoctorado/Pipe_post_IncosistencyPatways/4_Enrichment/Pathifier/RDB/Data/KEGG.txt")
+# gene_sets_path<-c("../Results/Basal/KEGG_pathways_in_df_genesymbol.tsv")
 Path_of_Code<-args[3]
 #Path_of_Code<-c("/home/rmejia/Documents/Doctorado/ProyectoDoctorado/Pipe_post_IncosistencyPatways/4_Enrichment/Pathifier/RDB/Code/")
+#Path_of_Code<-c("./")
 Path_of_Results<-args[4]
 #Path_of_Results<-c("/home/rmejia/Documents/Doctorado/ProyectoDoctorado/Pipe_post_IncosistencyPatways/4_Enrichment/Pathifier/RDB/Results/Normal/")
+#Path_of_Results<-c("../Results/Basal/Pathifier/")
 Tumour_subtype<-args[5]
+# Tumour_subtype <-"Basal_under_25_stbl_10_threshold_3"
 #Tumour_subtype<-"Normal"
 
 # Filter low value genes 
@@ -152,8 +157,8 @@ PDS_time<-proc.time() - ptm
 
 # Saving data 
 
-write(PDS_time, file = paste(Path_of_Results,c("PDS_time.txt"),sep = ""))
-save.image(file = paste(Path_of_Results,c("PDS.RData"),sep=""))
+write(PDS_time, file = paste(Path_of_Results,Tumour_subtype,c("PDS_time.txt"),sep = ""))
+save.image(file = paste(Path_of_Results,Tumour_subtype,c("PDS.RData"),sep=""))
 
 ###############################################################################
 ####################   Plotting  Raw PDS ######################################
@@ -169,7 +174,7 @@ color_labels_vector<-gsub("0","red",color_labels_vector)
 #load(RData_Directory)
 PDSmatrix <- mapply(FUN = c, PDS$scores)
 PDSmatrix <- t(PDSmatrix)
-
+colnames(PDSmatrix)<- colnames(matrix) # yo se lo añadi
 ###############################################################################
 ## Generating and assigning labels for pathways used in the analysis
 ###############################################################################
