@@ -54,6 +54,9 @@ Indicator_Row <-TCGAem_plus_indicator[1,]
 TCGAem <- TCGAem_plus_indicator[-1,]
 TCGAem <- log(TCGAem + 1)
 ABCem <-TCGAem[grep("ABC",rownames(TCGAem)),]
+#ABCem <-TCGAem[grep("^TAP2",rownames(TCGAem)),]
+#ABCem <-TCGAem[grep("^TAP1",rownames(TCGAem)),]
+#ABCem[1:22,1:5]
 TCGAem <- rbind(Indicator_Row,TCGAem)
 
 sum(str_detect( colnames(ABCem) , "\\.01")); colnames(ABCem)[566] ; sum(str_detect( colnames(ABCem) , "\\.11"))
@@ -71,6 +74,8 @@ meltedABC$gene_and_condition <- paste0(meltedABC$Gene , meltedABC$health)
 
 ## looking for the treshold
 p1 <- ggplot(meltedABC[1:(10*248),], aes(Expression_Value, fill = gene_and_condition)) + geom_density(alpha = 0.2)
+p1
+p1 <- ggplot(meltedABC[1:(248),], aes(Expression_Value, fill = gene_and_condition)) + geom_density(alpha = 0.2)
 p1
 p2 <- ggplot(meltedABC[((10*248)+1):(20*248),], aes(Expression_Value, fill=gene_and_condition)) + geom_density(alpha = 0.2)
 p2
@@ -124,7 +129,7 @@ source("splitdf_by_gene_level_in_tumours.R")
 source("ConvertKEGGList_to_DataFrame.R")
 # let's split our data frame acoording to the levels of ABCB1, 
 # we will build subdata frames, that only keep tumours with a ABCB1 expression level above the mean , under the mean , and so on...
-TCGAem
+
 list_TCGA_splited_by_ABCB1_levels_in_tumours <- splitdf_by_gene_level_in_tumours(TCGAem, 1:112, 113:248, "ABCB1")
 
 lapply(list_TCGA_splited_by_ABCB1_levels_in_tumours,dim) # let's check
@@ -172,6 +177,17 @@ write.table(KEGG_pathways_in_df, file=paste0(results_path,"KEGG_pathways_in_df_i
 save(KEGG_pathways_in_df_genesymbols,file=paste0(results_path,"KEGG_pathways_in_df_in_genesymbols.RData"))
 save(KEGG_pathways_in_df,file=paste0(results_path,"KEGG_pathways_in_df.RData"))
 
+#KEGG_pathways_in_df_genesymbols[1:5,1:5]
+#rownames(KEGG_pathways_in_df_genesymbols)[grep("hsa01522", rownames(KEGG_pathways_in_df_genesymbols))]
+#KEGG_pathways_in_df_genesymbols[grep("hsa01522", rownames(KEGG_pathways_in_df_genesymbols)),]
+#str(KEGG_pathways_in_df_genesymbols)
+#intersect(as.character(KEGG_pathways_in_df_genesymbols[grep("hsa01522", rownames(KEGG_pathways_in_df_genesymbols)),1:97]),
+#as.character(KEGG_pathways_in_df_genesymbols[grep("hsa01524", rownames(KEGG_pathways_in_df_genesymbols)),1:73]))
+
+#length(as.character(KEGG_pathways_in_df_genesymbols[grep("hsa01524", rownames(KEGG_pathways_in_df_genesymbols)),1:73]))
+#length(as.character(KEGG_pathways_in_df_genesymbols[grep("hsa01522", rownames(KEGG_pathways_in_df_genesymbols)),1:97]))
+#length(intersect(as.character(KEGG_pathways_in_df_genesymbols[grep("hsa01522", rownames(KEGG_pathways_in_df_genesymbols)),1:97]),
+#          as.character(KEGG_pathways_in_df_genesymbols[grep("hsa01524", rownames(KEGG_pathways_in_df_genesymbols)),1:73])))
 
 
 # go to script
@@ -196,11 +212,117 @@ system("Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/Basal/
 
 
 
-# Lo mejorcito
 
+#### Pharmacological data bases
+if (!require("rDGIdb")) {
+  BiocManager::install("rDGIdb", ask =FALSE)
+  library(rDGIdb)
+}
+genes <- c("TNF", "AP1", "AP2", "XYZA")
+result <- queryDGIdb(genes)
+str(result)
+resultSummary(result)
+detailedResults(result)
+byGene(result)
+searchTermSummary(result)
+geneCategories()
+####
+PDSzpaths <-read.table( file="../Results/Basal/Pathifier/Basal_under_25_stbl_10_threshold_3_75_median_PDSz_ordered_matrix.txt" , sep="\t" , quote = "" , stringsAsFactors = FALSE )
+head(PDSzpaths)
+str(KEGG_pathways_in_df_genesymbols)
+
+ordered_by_PDS <- KEGG_pathways_in_df_genesymbols[rownames(PDSzpaths),]
+#adf<-ordered_by_PDS
+hola<- queryDGIdb(as.character(ordered_by_PDS[1,]))
+str(hola)
+hola$interaction
+resultSummary(hola)
+
+#w <-1
+pathwaydf2drugs <- function(adf){
+  list_of_drugdfs <- list()
+  for(w in 1:dim(adf)[1] ){
+    pw_DGI<-  queryDGIdb(as.character(adf[w,]))
+    gene_drug_df <- resultSummary(pw_DGI)[,1:2]
+    list_of_drugdfs[[w]] <- data.frame(rep(rownames(adf)[w],dim(gene_drug_df)[1]), gene_drug_df, stringsAsFactors = FALSE)
+    colnames(list_of_drugdfs[[w]])[1]<- "Pathway"
+  }
+  names(list_of_drugdfs) <- rownames(adf)
+  return(list_of_drugdfs)
+}
+pw_gen_drug_df <-pathwaydf2drugs(ordered_by_PDS)
+
+pathwaydf2drugs_detailedres <- function(adf){
+  list_of_drugdfs <- list()
+  for(w in 1:dim(adf)[1] ){
+    pw_DGI<-  queryDGIdb(as.character(adf[w,]))
+    gene_drug_df <- detailedResults(pw_DGI)[,2:4]
+    list_of_drugdfs[[w]] <- data.frame(rep(rownames(adf)[w],dim(gene_drug_df)[1]), gene_drug_df, stringsAsFactors = FALSE)
+    colnames(list_of_drugdfs[[w]])[1]<- "Pathway"
+  }
+  names(list_of_drugdfs) <- rownames(adf)
+  return(list_of_drugdfs)
+}
+pw_gen_drug_df_list_detailed <- pathwaydf2drugs_detailedres(ordered_by_PDS)
+
+#pw_gen_drug_df <-pathwaydf2drugs(ordered_by_PDS[1:5,])
+#length(pw_gen_drug_df)
+#names(pw_gen_drug_df)
+dir.create(paste0(results_path,"Drugs/"))
+saveRDS(pw_gen_drug_df,file=paste0(results_path,"Drugs/","pw_gen_drug_df_lists.RDS"))
+saveRDS(pw_gen_drug_df_list_detailed ,file=paste0(results_path,"Drugs/","pw_gen_drug_df_list_detailed.RDS"))
+dflists_to_abigdf <- function(mylist){
+  #  for(){
+  BigDf<-mylist[[1]]
+  for( z in 2:length(mylist)){
+    BigDf <- rbind( BigDf , mylist[[z]])
+  }
+  return(BigDf)
+}
+
+pw_gen_drug_One_BigDf <- dflists_to_abigdf(pw_gen_drug_df)
+write.table(pw_gen_drug_One_BigDf, file=paste0(results_path,"Drugs/","pw_gen_drug_One_BigDf.tsv") ,sep="\t",col.names = TRUE,row.names=FALSE,quote = FALSE)
+pw_gen_drug_One_BigDf_including_interactions <- dflists_to_abigdf(pw_gen_drug_df_list_detailed)
+write.table(pw_gen_drug_One_BigDf_including_interactions, file=paste0(results_path,"Drugs/","pw_gen_drug_One_BigDf_including_interactions.tsv") ,sep="\t",col.names = TRUE,row.names=FALSE,quote = FALSE)
+head(pw_gen_drug_One_BigDf_including_interactions, 110)
+
+
+head(pw_gen_drug_One_BigDf, n=100)
+pw_gen_drug_One_BigDf[order(pw_gen_drug_One_BigDf[,2]),]
+pw_gen_drug_df[[4]]
+dim(pw_gen_drug_One_BigDf)
+
+
+## differential expresion 
+names(list_TCGA_splited_by_ABCB1_levels_in_tumours)
+colnames(list_TCGA_splited_by_ABCB1_levels_in_tumours[[4]])
+All_labels<-read.table("/media/raulmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Doctorado/ProyectoDoctorado/Pipe_post_IncosistencyPatways/4_Enrichment/DGE/Data/Labels_Controls_and_Normal_separated_TCGA.txt")
+Ctrl_basal_ABCB125thlow_labels <- data.frame(All_labels[which(rownames(All_labels) %in% colnames(list_TCGA_splited_by_ABCB1_levels_in_tumours[[4]])),])
+rownames(Ctrl_basal_ABCB125thlow_labels) <-  rownames(All_labels)[which(rownames(All_labels) %in% colnames(list_TCGA_splited_by_ABCB1_levels_in_tumours[[4]]))]
+colnames(Ctrl_basal_ABCB125thlow_labels)<- "Labels"
+write.table(Ctrl_basal_ABCB125thlow_labels, file=paste0(results_path,"Ctrl_basal_ABCB125thlow_labels.tsv") ,sep="\t",col.names = TRUE)
+
+
+####
+pw_gen_drug_One_BigDf_including_interactions_onlyDEG <- pw_gen_drug_One_BigDf_including_interactions[which(pw_gen_drug_One_BigDf_including_interactions[,2] %in% rownames(padj10_3_lfc1_results_DESeq_list[[1]])),]
+write.table(pw_gen_drug_One_BigDf_including_interactions_onlyDEG, file=paste0(results_path,"pw_gen_drug_One_BigDf_including_interactions_onlyDEG.tsv") ,sep="\t",col.names = TRUE)
+
+# Lo mejorcito
+# Jaccard 
+if (!require("OmicsMarkeR")) {
+  BiocManager::install("OmicsMarkeR", ask =FALSE)
+  library(OmicsMarkeR)
+}
+
+for( k in 1:length(kegg_sets_kid_gs)){
+  
+}
+as.character(kegg_sets_kid_gs[[1]])
+jaccard()
+
+("OmicsMarkeR"
+#
 
 Rscript /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/Pathifier_Args_100stabilizing_Filtervalue3_75.R /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/25th_top_low.tsv /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/KEGG_pathways_in_df_genesymbol.tsv /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/ABCB1_code/ /media/rmejia/ADATA/boba-bk-postsismo/rmejia/Documents/Otros_Proyectos_academicos/ABCB1/Results/ All_subtypes_low_ABCB1
 paste0(results_path,"low",".tsv" )
-
-
 # 3.75
