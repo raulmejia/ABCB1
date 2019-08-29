@@ -1,0 +1,4 @@
+# this program extract the rows of a matrix that match with a certain pattern
+find /directo -name "*pattern*" -exec sh -c 'cut -f8 {} > {}.txt' \;
+find ../Results/Splited/Matrices/ -name "Subexpression_matrix" -exec sh -c 'grep ABC {} > {}_ABC_genes.txt' \;
+
