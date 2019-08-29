@@ -6,10 +6,10 @@
 #################################################
 args <- commandArgs(trailingOnly = TRUE)
 
-if (!require("splitstackshape")) {
-  install.packages("splitstackshape", ask =FALSE)
-  library("splitstackshape")
-}
+#if (!require("splitstackshape")) {
+#  install.packages("splitstackshape", ask =FALSE)
+#  library("splitstackshape")
+#}
 
 ###########################################
 ### Data given by the user
@@ -20,7 +20,7 @@ Path_to_your_Matrix <-args[1]
 Path_to_Labels <-args[2]
 # Path_of_Results<-c("../Results/Splited/Matrices/")
 Path_of_Results <-args[3]
-# Title_of_Results <- c("TCGA_")
+# Title_of_Results <- c("TCGA")
 Title_of_Results <-args[4]
 ############################################
 ### Reading the data
@@ -57,10 +57,9 @@ list_of_submatrices <- lapply( list_of_submatrices, t)
 ###########################################
 ######### Save the results
 ###########################################
-
-save.RDS(list_of_submatrices , file = paste0(Path_of_Results,"List_of_sub_expression_matrices_of",Title_of_Results,".txt" ))
+dir.create( Path_of_Results, recursive = TRUE)
+saveRDS(list_of_submatrices , file = paste0(Path_of_Results,"List_of_sub_expression_matrices_of_",Title_of_Results,".RDS" ))
 for( k in names(list_of_submatrices)  ){
-  write.table( list_of_submatrices[[k]], col.names = TRUE, row.names = TRUE, sep = "\t", quote = ""
-               file = paste0(Path_of_Results,"Subexpression_matrix_",names,"_from_",Title_of_Results,".tsv" ))
+  write.table(list_of_submatrices[[k]], col.names = TRUE, row.names = TRUE, sep = "\t", quote = FALSE,
+              file = paste0(Path_of_Results,"Subexpression_matrix_",k,"_from_",Title_of_Results,"_.tsv" ))
 }
-
