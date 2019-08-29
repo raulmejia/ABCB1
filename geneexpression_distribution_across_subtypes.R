@@ -2,7 +2,6 @@
 # gene across different predetermined subtypes
 
 ################################################################################
-# 2. Filtering and preprocessing of data for Pathifier
 ## Author: Raúl Alejandro Mejía Pedroza github: https://github.com/AngelCampos
 ################################################################################
 # Installing and loading the required libraries
