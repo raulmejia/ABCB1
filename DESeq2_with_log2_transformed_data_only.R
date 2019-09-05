@@ -1,0 +1,119 @@
+########################################################################
+### This script Get the Differential expresed genes in RNAseq data #####
+# Writed by Raúl Alejandro Mejía Pedroza                              ##
+########################################################################
+#######   Data selected by te user #####################################
+########################################################################
+args <- commandArgs(trailingOnly = TRUE)
+exp_mat_path <-args[1]
+#exp_mat_path <-c("../Results/Basal/25th_top_high.tsv")
+#exp_mat_path <-c("../Results/25th_top_high.tsv")
+Labels_path <-args[2]
+#Labels_path <-c("../Data/Labels_Controls_and_Normal_separated_TCGA.txt")
+Path_of_Code<-args[3]
+#Path_of_Code<-c("./")
+results_path <-args[4]
+#results_path <-c("../Results/ToyDeSeq/")
+Label_for_results <-args[5]
+# Label_for_results <- c("_DGE_TCGA_only_log2transformed")
+mylfctreshold <-args[5]
+# mylfctreshold <-0.5
+myp.adj <- args[6]
+# myp.adj <-0.01
+mycoresavaiable <- args[7]
+# mycoresavaiable <-7
+# Nota la categoria de referencia se llama "Control" 
+################################################
+######  Libraries needed    ####################
+################################################
+if (!require("BiocManager")) {
+  biocLite("BiocManager")
+  library(BiocManager)}
+if (!require("DESeq2")) {
+  BiocManager::install("DESeq2")
+  library(DESeq2)}
+if (!require("BiocParallel")) {
+  BiocManager::install("BiocParallel")
+  library(BiocParallel)}
+if (!require("DEFormats")) {
+  BiocManager::install("DEFormats")
+  library(DEFormats)}
+
+dir.create(results_path,recursive = TRUE)
+########################################################################
+#######   Loading the data          ####################################
+########################################################################
+Exp_Mat <- read.table(exp_mat_path ,header=TRUE , sep= "\t")
+Exp_Mat <- as.matrix(Exp_Mat)
+MyLabels <-read.table(Labels_path)
+
+#######################################################################
+############   log2 transforming your matrix              #############
+#######################################################################
+Exp_Mat_bk <- Exp_Mat 
+NORMAL <- Exp_Mat_bk[ grep("NORMAL",rownames(Exp_Mat_bk)),]
+Exp_Mat_bk <- Exp_Mat_bk[- grep("NORMAL",rownames(Exp_Mat_bk)),]
+Exp_Mat_bk <- log2(Exp_Mat_bk +1)
+Exp_Mat_bk <- rbind(NORMAL , Exp_Mat_bk)
+
+########################################################################
+#######   Extracting the propper labels ################################
+########################################################################
+positions <- which( rownames(MyLabels) %in% colnames(Exp_Mat_bk) )
+Adjusted_Labels <- data.frame(MyLabels[ positions,])
+rownames(Adjusted_Labels) <- rownames(MyLabels)[ positions]
+sum(as.vector(table(Adjusted_Labels)))- 112
+which( colnames(Exp_Mat_bk) %in% rownames(MyLabels) )
+paste(colnames(Exp_Mat_bk) ,  rownames(MyLabels)[ positions])
+
+#######################################################################
+############   Building the DDS DESeqDataSet      #####################
+#######################################################################
+colnames(Adjusted_Labels)[1] <- "condition"
+Adjusted_Labels$condition <- relevel(Adjusted_Labels$condition, ref="Control")
+My_dds <- DESeqDataSetFromMatrix(countData = round( Exp_Mat_bk ), colData = Adjusted_Labels, design = ~ condition) 
+colnames( Exp_Mat_bk) == rownames(Adjusted_Labels)
+#######################################################################
+############   VST of your matrix               #####################
+#######################################################################
+
+saveRDS(My_dds,file=paste0(results_path,"dds_log2_only_matrix_from",Label_for_results,"_.RDS"))
+dists <- dist(t(assay(My_dds)))
+plot(hclust(dists))
+
+#######################################################################
+############   Now the DGE function               #####################
+#######################################################################
+time1<-proc.time()
+
+  register(MulticoreParam(mycoresavaiable))
+  My_DESeq <- DESeq( My_dds,parallel = TRUE)
+  register(MulticoreParam(mycoresavaiable))
+  results_DESeq <-results( My_DESeq,parallel = TRUE)
+time2 = proc.time()-time1
+
+
+# Saving the results
+save(My_DESeq,file=paste0(results_path,"DESeq_object_of_",Label_for_results,".RData"))
+save(results_DESeq,file=paste0(results_path,"DESeq_results",Label_for_results,".RData"))
+
+register(MulticoreParam(mycoresavaiable))
+lfc1_results_DESeq <-results(My_DESeq,parallel = TRUE, lfcThreshold= mylfctreshold)
+
+time3 = proc.time()-time1
+
+# Saving the results and timming
+save(lfc1_results_DESeq_list,file=paste0(results_path,"lfc1_results_DESeq",Label_for_results,".RData"))
+write.table(c(time2,time3),file=paste0(results_path,Label_for_results,"Timing_runfunctions.txt"))
+
+
+  pminus10_3<-grepl("TRUE",lfc1_results_DESeq$padj < myp.adj)
+  padj10_3_lfc1_results_DESeq <-lfc1_results_DESeq[pminus10_3,]
+
+#saving the results
+save(padj10_3_lfc1_results_DESeq,file=paste0(results_path,"padj10_3_lfc1_results_DESeq",Label_for_results,".RData"))
+write.table(padj10_3_lfc1_results_DESeq, 
+            file=paste0(results_path,"padj10_3_lfc1_results_DESeq",Label_for_results,".tsv"),
+            sep="\t", quote=FALSE, row.names = TRUE, col.names = TRUE
+            )
+

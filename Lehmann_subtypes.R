@@ -29,11 +29,11 @@ Path_to_your_Matrix<-args[1] # The path to your matrix
 # Path_to_your_Matrix<-c("../Results/Splited/Matrices/TCGA-log2/Subexpression_matrix_Basal_from_TCGA-log2_.tsv")
 #phenoData_path<-args[2] # The path to the information about the samples
 # phenoData_path<-c("../Data/joined_indicator_METABRIC.txt")
-Path_of_Code<-args[3] # The path to your code
+Path_of_Code<-args[2] # The path to your code
 # Path_of_Code<-c("./")
-Path_of_Results<-args[4] # # where do you want to save your results?
+Path_of_Results<-args[3] # # where do you want to save your results?
 # Path_of_Results<-c("../Results/Lehmann-STROMA4/")
-Label_for_Results<-args[5] # Label for your results
+Label_for_Results<-args[4] # Label for your results
 # Label_for_Results <-"Basal-TCGA-log2"
 # If you use windows and you have troubles with your paths, please try out this tool: # Path_of_x <-choose.dir()
 
