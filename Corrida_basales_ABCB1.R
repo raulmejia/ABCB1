@@ -41,7 +41,6 @@ if (!require("stringr")) {
 
 #Labels_Controls_and_Normal_separated_TCGA.txt
 
-
 setwd("~/Documentos/ABCB1/ABCB1_code/")
 dir.create("../Results/Basal")
 results_path <-c("../Results/Basal/")

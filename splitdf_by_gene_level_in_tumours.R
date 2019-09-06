@@ -11,7 +11,7 @@ Split_by_thisgene_level<- function( mymatrix, gene){
 }
 
 merge_with_healthem <- function(list_splited, healthem){
-  #This funcion paste the previously splitter tumours with the "Healthies"
+  #This funcion paste the previously splitted tumours with the "Healthies"
   list_splited[["25th_top_high"]] <- cbind(healthem, list_splited[["25th_top_high"]]  )
   list_splited[["high"]] <- cbind(healthem, list_splited[["high"]] )
   list_splited[["25th_top_low"]] <- cbind(healthem, list_splited[["25th_top_low"]] )

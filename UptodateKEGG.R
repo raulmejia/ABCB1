@@ -56,7 +56,7 @@ list_of_chr_to_df<-function(X){
 #######################################
 ###### Data manipulation ##############
 #######################################
-dir.create(results_path)
+dir.create(results_path, recursive = TRUE)
 
 kegg_gsets <-kegg.gsets(species = "hsa", id.type = "kegg") # Downloading the most recent keggdb
 # WS #  str(kegg_gsets)
