@@ -14,7 +14,6 @@ gene_sets_path<-args[2]
 #gene_sets_path<-c("/home/rmejia/Documents/Doctorado/ProyectoDoctorado/Pipe_post_IncosistencyPatways/4_Enrichment/Pathifier/RDB/Data/KEGG.txt")
 Path_of_Code<-args[3]
 #Path_of_Code<-c("/home/rmejia/Documents/Doctorado/ProyectoDoctorado/Pipe_post_IncosistencyPatways/4_Enrichment/Pathifier/RDB/Code/")
-Path_of_Code <-c("./")
 Path_of_Results<-args[4]
 #Path_of_Results<-c("/home/rmejia/Documents/Doctorado/ProyectoDoctorado/Pipe_post_IncosistencyPatways/4_Enrichment/Pathifier/RDB/Results/Normal/")
 Tumour_subtype<-args[5]
