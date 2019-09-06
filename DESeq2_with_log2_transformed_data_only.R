@@ -75,8 +75,8 @@ colnames( Exp_Mat_bk) == rownames(Adjusted_Labels)
 #######################################################################
 
 saveRDS(My_dds,file=paste0(results_path,"dds_log2_only_matrix_from",Label_for_results,"_.RDS"))
-dists <- dist(t(assay(My_dds)))
-plot(hclust(dists))
+# dists <- dist(t(assay(My_dds))) # let's see the grouping of the samples
+# plot(hclust(dists))
 
 #######################################################################
 ############   Now the DGE function               #####################
