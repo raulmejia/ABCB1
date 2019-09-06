@@ -7,7 +7,6 @@
 args <- commandArgs(trailingOnly = TRUE)
 exp_mat_path <-args[1]
 # exp_mat_path <-c("../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_low.tsv")
-#exp_mat_path <-c("../Results/25th_top_high.tsv")
 Labels_path <-args[2]
 # Labels_path <-c("../Data/Labels_Controls_and_Normal_separated_TCGA.txt")
 Path_of_Code<-args[3]
@@ -16,11 +15,11 @@ results_path <-args[4]
 # results_path <-c("../Results/DEG/TCGA/log2only/")
 Label_for_results <-args[5]
 # Label_for_results <- c("_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed")
-mylfctreshold <-args[5]
+mylfctreshold <-args[6]
 # mylfctreshold <- 0.5
-myp.adj <- args[6]
+myp.adj <- args[7]
 # myp.adj <- 0.05
-mycoresavaiable <- args[7]
+mycoresavaiable <- args[8]
 # mycoresavaiable <-7
 # Nota la categoria de referencia se llama "Control" 
 ################################################
