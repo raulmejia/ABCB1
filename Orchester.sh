@@ -18,6 +18,26 @@ Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/Matrices_split
 
 Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/Basal/TCGA/ TCGA_Basal_above_percentile_75_stbl_10
 
+####################################
+## DGE genes
+####################################
+## only log 2 transformed
+Rscript DESeq2_with_log2_transformed_data_only.R ../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_low.tsv ../Data/Labels_Controls_and_Normal_separated_TCGA.txt ./ ../Results/DEG/TCGA/log2only/ _DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed 0.5 0.05 7
+
+Rscript DESeq2_with_log2_transformed_data_only.R ../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_low.tsv ../Data/Labels_Controls_and_Normal_separated_TCGA.txt ./ ../Results/DEG/TCGA/log2only/ _DGE_TCGA_Basal_ABCB1_above_per50_only_log2transformed 0.5 0.05 7
+
+Rscript DESeq2_with_log2_transformed_data_only.R ../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_high.tsv ../Data/Labels_Controls_and_Normal_separated_TCGA.txt ./ ../Results/DEG/TCGA/log2only/ _DGE_TCGA_Basal_ABCB1_above_per50_only_log2transformed 0.5 0.05 7
+
+Rscript DESeq2_with_log2_transformed_data_only.R ../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ../Data/Labels_Controls_and_Normal_separated_TCGA.txt ./ ../Results/DEG/TCGA/log2only/ _DGE_TCGA_Basal_ABCB1_above_per75_only_log2transformed 0.5 0.05 7
+
+
+## VST
+
+
+
+
+grep -nr Breast ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix.txt ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_50_stbl_10_median_PDSz_ordered_matrix.txt ../Results/Pathifier/Basal/TCGA/TCGA_Basal_above_percentile_50_stbl_10_median_PDSz_ordered_matrix.txt ../Results/Pathifier/Basal/TCGA/TCGA_Basal_above_percentile_75_stbl_10_median_PDSz_ordered_matrix.txt 
+
 
 for names in ../Results/Splited/SubMatrices_with_controls/Subexpression_matrix_*from_TCGA_.tsv ; do
 new_names=${names%_.tsv}

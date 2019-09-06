@@ -6,20 +6,20 @@
 ########################################################################
 args <- commandArgs(trailingOnly = TRUE)
 exp_mat_path <-args[1]
-#exp_mat_path <-c("../Results/Basal/25th_top_high.tsv")
+# exp_mat_path <-c("../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_low.tsv")
 #exp_mat_path <-c("../Results/25th_top_high.tsv")
 Labels_path <-args[2]
-#Labels_path <-c("../Data/Labels_Controls_and_Normal_separated_TCGA.txt")
+# Labels_path <-c("../Data/Labels_Controls_and_Normal_separated_TCGA.txt")
 Path_of_Code<-args[3]
-#Path_of_Code<-c("./")
+# Path_of_Code<-c("./")
 results_path <-args[4]
-#results_path <-c("../Results/ToyDeSeq/")
+# results_path <-c("../Results/DEG/TCGA/log2only/")
 Label_for_results <-args[5]
-# Label_for_results <- c("_DGE_TCGA_only_log2transformed")
+# Label_for_results <- c("_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed")
 mylfctreshold <-args[5]
-# mylfctreshold <-0.5
+# mylfctreshold <- 0.5
 myp.adj <- args[6]
-# myp.adj <-0.01
+# myp.adj <- 0.05
 mycoresavaiable <- args[7]
 # mycoresavaiable <-7
 # Nota la categoria de referencia se llama "Control" 
@@ -103,7 +103,7 @@ lfc1_results_DESeq <-results(My_DESeq,parallel = TRUE, lfcThreshold= mylfctresho
 time3 = proc.time()-time1
 
 # Saving the results and timming
-save(lfc1_results_DESeq_list,file=paste0(results_path,"lfc1_results_DESeq",Label_for_results,".RData"))
+save(lfc1_results_DESeq,file=paste0(results_path,"lfc1_results_DESeq",Label_for_results,".RData"))
 write.table(c(time2,time3),file=paste0(results_path,Label_for_results,"Timing_runfunctions.txt"))
 
 
