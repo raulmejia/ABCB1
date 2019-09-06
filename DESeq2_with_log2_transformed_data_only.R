@@ -61,9 +61,7 @@ Exp_Mat_bk <- rbind(NORMAL , Exp_Mat_bk)
 positions <- which( rownames(MyLabels) %in% colnames(Exp_Mat_bk) )
 Adjusted_Labels <- data.frame(MyLabels[ positions,])
 rownames(Adjusted_Labels) <- rownames(MyLabels)[ positions]
-sum(as.vector(table(Adjusted_Labels)))- 112
-which( colnames(Exp_Mat_bk) %in% rownames(MyLabels) )
-paste(colnames(Exp_Mat_bk) ,  rownames(MyLabels)[ positions])
+
 
 #######################################################################
 ############   Building the DDS DESeqDataSet      #####################
