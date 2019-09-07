@@ -16,12 +16,18 @@ results_path <-args[4]
 Label_for_results <-args[5]
 # Label_for_results <- c("_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed")
 mylfctreshold <-args[6]
-# mylfctreshold <- 0.5
-myp.adj <- args[7]
+# mylfctreshold <- 0.6
+myp.adj <-args[7]
 # myp.adj <- 0.05
-mycoresavaiable <- args[8]
+mycoresavaiable <-args[8]
 # mycoresavaiable <-7
 # Nota la categoria de referencia se llama "Control" 
+################################################
+######  Coercing to numeric ####################
+################################################
+mylfctreshold <- as.numeric(mylfctreshold)
+myp.adj <- as.numeric(myp.adj)
+mycoresavaiable <- as.numeric(mycoresavaiable)
 ################################################
 ######  Libraries needed    ####################
 ################################################
@@ -85,8 +91,10 @@ time1<-proc.time()
 
   register(MulticoreParam(mycoresavaiable))
   My_DESeq <- DESeq( My_dds,parallel = TRUE)
+  print(" My_DESeq <- DESeq( My_dds,parallel = TRUE) finished")
   register(MulticoreParam(mycoresavaiable))
   results_DESeq <-results( My_DESeq,parallel = TRUE)
+  print("results_DESeq <-results( My_DESeq,parallel = TRUE) finished")
 time2 = proc.time()-time1
 
 

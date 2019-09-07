@@ -1,28 +1,34 @@
 ########################################################################
 ### This script Get the Differential expresed genes in RNAseq data #####
+## Using VST in the data                                            ####
 # Writed by Raúl Alejandro Mejía Pedroza                              ##
 ########################################################################
 #######   Data selected by te user #####################################
 ########################################################################
 args <- commandArgs(trailingOnly = TRUE)
 exp_mat_path <-args[1]
-#exp_mat_path <-c("../Results/Basal/25th_top_high.tsv")
-#exp_mat_path <-c("../Results/25th_top_high.tsv")
+# exp_mat_path <-c("../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_low.tsv")
 Labels_path <-args[2]
-#Labels_path <-c("../Data/Labels_Controls_and_Normal_separated_TCGA.txt")
+# Labels_path <-c("../Data/Labels_Controls_and_Normal_separated_TCGA.txt")
 Path_of_Code<-args[3]
-#Path_of_Code<-c("./")
+# Path_of_Code<-c("./")
 results_path <-args[4]
-#results_path <-c("../Results/ToyDeSeq/")
+# results_path <-c("../Results/DEG/TCGA/VST/")
 Label_for_results <-args[5]
-# Label_for_results <- c("_DGE_TCGA")
-mylfctreshold <-args[5]
-#mylfctreshold <-0.5
-myp.adj <- args[6]
-# myp.adj<-0.01
-mycoresavaiable <- args[7]
-#mycoresavaiable <-7
+# Label_for_results <- c("_DGE_TCGA_Basal_ABCB1_under_per25_VST_")
+mylfctreshold <-args[6]
+# mylfctreshold <- 0.6
+myp.adj <-args[7]
+# myp.adj <- 0.05
+mycoresavaiable <-args[8]
+# mycoresavaiable <-7
 # Nota la categoria de referencia se llama "Control" 
+################################################
+######  Coercing to numeric ####################
+################################################
+mylfctreshold <- as.numeric(mylfctreshold)
+myp.adj <- as.numeric(myp.adj)
+mycoresavaiable <- as.numeric(mycoresavaiable)
 ################################################
 ######  Libraries needed    ####################
 ################################################
@@ -41,24 +47,28 @@ if (!require("DEFormats")) {
 
 dir.create(results_path,recursive = TRUE)
 ########################################################################
-#######   Loading the data #############################################
+#######   Loading the data          ####################################
 ########################################################################
 Exp_Mat <- read.table(exp_mat_path ,header=TRUE , sep= "\t")
 Exp_Mat <- as.matrix(Exp_Mat)
 MyLabels <-read.table(Labels_path)
+Exp_Mat_bk <- Exp_Mat[-1,]
+
 ########################################################################
 #######   Extracting the propper labels ################################
 ########################################################################
-Adjusted_Labels <- data.frame(MyLabels[which( rownames(MyLabels) %in% colnames(Exp_Mat) ),])
-rownames(Adjusted_Labels) <- rownames(MyLabels)[ which( rownames(MyLabels) %in% colnames(Exp_Mat) )]
-sum(as.vector(table(Adjusted_Labels)))- 112
+positions <- which( rownames(MyLabels) %in% colnames(Exp_Mat_bk) )
+Adjusted_Labels <- data.frame(MyLabels[ positions,])
+rownames(Adjusted_Labels) <- rownames(MyLabels)[ positions]
+
 
 #######################################################################
 ############   Building the DDS DESeqDataSet      #####################
 #######################################################################
 colnames(Adjusted_Labels)[1] <- "condition"
-MyLabels$condition <- relevel(Adjusted_Labels$condition, ref="Control")
-My_dds <- DESeqDataSetFromMatrix(countData = round(Exp_Mat), colData = Adjusted_Labels, design = ~ condition) 
+Adjusted_Labels$condition <- relevel(Adjusted_Labels$condition, ref="Control")
+My_dds <- DESeqDataSetFromMatrix(countData = round( Exp_Mat_bk), colData = Adjusted_Labels, design = ~ condition) 
+colnames( Exp_Mat_bk) == rownames(Adjusted_Labels)
 
 #######################################################################
 ############   VST of your matrix               #####################
@@ -66,8 +76,8 @@ My_dds <- DESeqDataSetFromMatrix(countData = round(Exp_Mat), colData = Adjusted_
 
 My_vsd <- varianceStabilizingTransformation(My_dds)
 saveRDS(My_vsd,file=paste0(results_path,"vsd_matrix_from",Label_for_results,"_.RDS"))
-dists <- dist(t(assay(My_vsd)))
-plot(hclust(dists))
+# dists <- dist(t(assay(My_vsd)))
+# plot(hclust(dists))
 
 #######################################################################
 ############   Now the DGE function               #####################
@@ -75,14 +85,17 @@ plot(hclust(dists))
 time1<-proc.time()
 
 My_dds_from_vsd_data <- DESeqDataSetFromMatrix(countData = round(assay(My_vsd)), colData = Adjusted_Labels, design = ~ condition) 
-  register(MulticoreParam(mycoresavaiable))
-  My_DESeq <- DESeq( My_dds_from_vsd_data,parallel = TRUE)
-  register(MulticoreParam(mycoresavaiable))
-  results_DESeq <-results( My_DESeq,parallel = TRUE)
+register(MulticoreParam(mycoresavaiable))
+My_DESeq <- DESeq( My_dds_from_vsd_data,parallel = TRUE)
+register(MulticoreParam(mycoresavaiable))
+results_DESeq <-results( My_DESeq,parallel = TRUE)
 time2 = proc.time()-time1
 
+#######################################################################
+############     Saving the results               #####################
+#######################################################################
 
-# Saving the results
+
 save(My_DESeq,file=paste0(results_path,"DESeq_object_of_",Label_for_results,".RData"))
 save(results_DESeq,file=paste0(results_path,"DESeq_results",Label_for_results,".RData"))
 
@@ -92,7 +105,7 @@ lfc1_results_DESeq <-results(My_DESeq,parallel = TRUE, lfcThreshold= mylfctresho
 time3 = proc.time()-time1
 
 # Saving the results and timming
-save(lfc1_results_DESeq_list,file=paste0(results_path,"lfc1_results_DESeq",Label_for_results,".RData"))
+save(lfc1_results_DESeq,file=paste0(results_path,"lfc1_results_DESeq",Label_for_results,".RData"))
 write.table(c(time2,time3),file=paste0(results_path,Label_for_results,"Timing_runfunctions.txt"))
 
 
@@ -105,88 +118,4 @@ write.table(padj10_3_lfc1_results_DESeq,
             file=paste0(results_path,"padj10_3_lfc1_results_DESeq",Label_for_results,".tsv"),
             sep="\t", quote=FALSE, row.names = TRUE, col.names = TRUE
             )
-
-
-?write.table
-
-
-
-
-
-
-#######################################################################
-############   Cutting the matrices               #####################
-#######################################################################
-#  
-List_of_matrices<-list()
-List_of_dfs <-list()
-categories <-unique(as.character(AllLabels$Labels))
-categories <-setdiff(categories,"Control")
-
-#let's cut the initial matrix and dataframe
-for(k in (categories)){
-  # Making the vector to subsetting the data.
-  selecteditems<-(grepl("Control",as.character(AllLabels$Labels)) | grepl(k,as.character(AllLabels$Labels)))
-  # Subsetting the dataframe "ALLLabels"
-  List_of_dfs[[k]]<-data.frame(as.character(AllLabels[selecteditems,]))
-  rownames(List_of_dfs[[k]])<-rownames(AllLabels)[selecteditems]
-  colnames(List_of_dfs[[k]])<-"condition"
-  # # Subsetting the matrix "Exp_Mat"
-  List_of_matrices[[k]]<-Exp_Mat[,rownames(AllLabels)[selecteditems]]
-}
-
-lapply(List_of_matrices,dim)
-table(AllLabels)+112
-#######################################################################
-############    Building the dds objects          #####################
-#######################################################################
-dds_list<-list()
-for(w in (categories)){
-  List_of_dfs[[w]]$condition <- relevel(List_of_dfs[[w]]$condition, ref="Control")
-  dds_list[[w]]<- DESeqDataSetFromMatrix(countData = round(List_of_matrices[[w]]),
-                                colData = List_of_dfs[[w]],
-                                design = ~ condition)  
-}
-
-#######################################################################
-############   Now the DGE function               #####################
-#######################################################################
-
-library("BiocParallel")
-
-time1<-proc.time()
-DESeq_list<-list()
-results_DESeq_list<-list()
-for(x in categories){
-  register(MulticoreParam(mycoresavaiable))
-  DESeq_list[[x]]<- DESeq(dds_list[[x]],parallel = TRUE)
-  register(MulticoreParam(mycoresavaiable))
-  results_DESeq_list[[x]]<-results(DESeq_list[[x]],parallel = TRUE)
-}
-time2 = proc.time()-time1
-
-# Saving the results
-save(DESeq_list,file=paste0(results_path,"DESeq_list_TCGA-Mike.RData"))
-save(results_DESeq_list,file=paste0(results_path,"results_DESeq_list_TCGA-Mike.RData"))
-
-lfc1_results_DESeq_list<-list()
-for(x in categories){
-  register(MulticoreParam(mycoresavaiable))
-  lfc1_results_DESeq_list[[x]]<-results(DESeq_list[[x]],parallel = TRUE, lfcThreshold= mylfctreshold)
-}
-time3 = proc.time()-time1
-
-# Saving the results and timming
-save(lfc1_results_DESeq_list,file=paste0(results_path,"lfc1_results_DESeq_list_TCGA-Mike.RData"))
-write.table(c(time2,time3),file="Timing_runfunctions.txt")
-
-
-padj10_3_lfc1_results_DESeq_list<-list()
-for(k in categories){
-  pminus10_3<-grepl("TRUE",lfc1_results_DESeq_list[[k]]$padj < myp.adj)
-  padj10_3_lfc1_results_DESeq_list[[k]]<-lfc1_results_DESeq_list[[k]][pminus10_3,]
-}
-#saving the results
-save(padj10_3_lfc1_results_DESeq_list,file=paste0(results_path,"padj10_3_lfc1_results_DESeq_list_TCGA-Mike.RData"))
-
 

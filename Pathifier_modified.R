@@ -22,6 +22,12 @@ Stabilizing <- args[6] # Parameter to stabilization of the adjusted curve
 # Stabilizing <- 4 # 
 Filter_value <- args[7] # Filter low value genes 
 # Filter_value=3.75
+#######################################################################
+###  Some data given by the user should be numeric,         ###########
+###  hence we coerce such variables to that mode            ###########
+#######################################################################
+Stabilizing <- as.numeric( Stabilizing )
+Filter_value <- as.numeric( Filter_value )
 
 ###############################################################################
 ### Installing and/or loading required packages
