@@ -116,8 +116,8 @@ write.table(c(time2,time3),file=paste0(results_path,Label_for_results,"Timing_ru
   padj10_3_lfc1_results_DESeq <-lfc1_results_DESeq[pminus10_3,]
 
 #saving the results
-save(padj10_3_lfc1_results_DESeq[,c("log2FoldChange","padj")],file=paste0(results_path,"padj10_3_lfc1_results_DESeq",Label_for_results,".RData"))
-write.table(padj10_3_lfc1_results_DESeq, 
+save(padj10_3_lfc1_results_DESeq,file=paste0(results_path,"padj10_3_lfc1_results_DESeq",Label_for_results,".RData"))
+write.table(padj10_3_lfc1_results_DESeq[,c("log2FoldChange","padj")], 
             file=paste0(results_path,"padj10_3_lfc1_results_DESeq",Label_for_results,".tsv"),
             sep="\t", quote=FALSE, row.names = TRUE, col.names = TRUE
             )
