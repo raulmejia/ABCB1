@@ -1,8 +1,0 @@
-robust_score_bydist. min_exp= 3.75 , min_std= 11.91253 
-pathway  1 > sig: 0.07408296 
-pathway  1  k= 13 ( 13 ) wj= 4 >new sig: 0.06370662 | accepted!
-pathway  1  k= 12 ( 12 ) wj= 3 >new sig: 0.05012611 | accepted!
-pathway  1  k= 11 ( 11 ) wj= 5 >new sig: 0.04967402 x rejected
-pathway  2 > sig: 0.001494378 
-pathway  3 > sig: 0.09057919 
-pathway  3  k= 7 ( 7 ) wj= 1 >new sig: 0.002271596 | accepted!
