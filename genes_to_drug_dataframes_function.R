@@ -8,7 +8,7 @@ if (!require("rDGIdb")) {
 ################################
 ## Data given by the user ######
 ################################
-AnottateDrugsForthisCharacter <- function(myvector){
+AnottateDrugsForthisCharacter <- function(mygenes){
   myquery <- queryDGIdb(mygenes)
   return(detailedResults(myquery)[,c(1,3,4)])
 }
