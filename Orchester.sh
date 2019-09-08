@@ -33,9 +33,9 @@ Rscript DESeq2_with_log2_transformed_data_only.R ../Results/Matrices_splited_by_
 
 Rscript DESeq2_with_log2_transformed_data_only.R ../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ../Data/Labels_Controls_and_Normal_separated_TCGA.txt ./ ../Results/DEG/TCGA/log2only/ _DGE_TCGA_Basal_ABCB1_above_per75_only_log2transformed_of0_6_padjof0_05 0.6 0.05 7
 
+## Big DF Pathway Target Drug Interaction LogFC 
 
-## VST
-
+Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix_Top20.txt ../Results/DEG/TCGA/log2only/padj10_3_lfc1_results_DESeq_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed_lfc2_of0_6_padjof0_05.tsv ./ ../Results/BigDfPTD/TCGA/ TCGA_Basal_under_percentile_25_top20_DEG_log2only
 
 
 
