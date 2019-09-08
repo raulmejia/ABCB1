@@ -26,7 +26,7 @@ Tumour_subtype<-args[5]
 
 # Filter low value genes 
 Filter_value=3
-
+dir.create(Path_of_Results, recursive = TRUE)
 ###############################################################################
 ### Installing and/or loading required packages
 ###############################################################################
