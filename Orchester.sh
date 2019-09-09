@@ -110,9 +110,6 @@ Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_sp
 
 Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_above_per75_lfc0_6_padj0_05
 
-## Big DF Pathway Target Drug Interaction LogFC 
-
-Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/METABRIC/METABRIC_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix_Top20.txt ../Results/DEG/METABRIC/DGE_METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_050.050.6Case_Controls_ID_with_ILMN.txt ./ ../Results/BigDfPTD/METABRIC/ METABRIC_Basal_under_percentile_25_top20_DEG_
 
 
 
