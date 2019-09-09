@@ -61,7 +61,7 @@ Labels <-read.table(Labels_path)
 ### Preprocessing some data given y the user
 ############################################
 # coercing to numeric 
-Filter_value <- as.numeric( Filter_value ) 
+#Filter_value <- as.numeric( Filter_value ) 
 mypvalue <- as.numeric(  mypvalue)
 mylfc <- as.numeric( mylfc)
 dir.create(Path_of_Results, recursive = TRUE)
@@ -126,6 +126,7 @@ samples
  results_only_affys<-list(length(colnames(contrast.matrix)))
  for(i in 1:length(colnames(contrast.matrix))){
    DGEs<-topTable(huvec_ebFit, coef=colnames(contrast.matrix)[i], number=10000, p.value = mypvalue, lfc = mylfc)
+   DGEs<-DGEs[order(rownames(DGEs)),]
    # Saving the matrix
    write.table(DGEs, paste(Path_of_Results ,"DGE_",Label_for_results, mypvalue, mylfc, colnames(contrast.matrix)[i], "_ID_with_ILMN.txt", sep=""), sep="\t", quote=FALSE)
    # Saving with no ILMN_ identifiers
