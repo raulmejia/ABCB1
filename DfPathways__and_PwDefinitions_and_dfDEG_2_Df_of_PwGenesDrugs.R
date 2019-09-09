@@ -27,7 +27,7 @@ if (!require("plyr")) {
 ###########################################
 args <- commandArgs(trailingOnly = TRUE)
 Path_to_Ptwydb <- args[1] # The path to the information about the samples
-# Path_to_Ptwydb <-c("../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv"); Path_to_your_Matrix <-c("../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix_Top20.txt"); Path_your_DEG <- c("../Results/DEG/TCGA/log2only/padj10_3_lfc1_results_DESeq_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed_lfc2_of0_6_padjof0_05.tsv"); Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/BigDfPTD/TCGA/") ; Label_for_Results <-"Df_pw_gn_TCGA"
+# Path_to_Ptwydb <-c("../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv"); Path_to_your_Matrix <-c("../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix.txt_top_50.tsv"); Path_your_DEG <- c("../Results/DEG/TCGA/log2only/padj10_3_lfc1_results_DESeq_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed_lfc2_of0_6_padjof0_05.tsv"); Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/BigDfPTD/TCGA/") ; Label_for_Results <-"TCGA_Basal_under_percentile_25_ALLpw_DEG_log2only"
 Path_to_your_Matrix <- args[2] # The path to your matrix
 # Path_to_your_Matrix <-c("TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix_Top20.txt");
 Path_your_DEG <- args[3]
@@ -45,15 +45,15 @@ Label_for_Results<-args[6] # Label for your results
 ##########################################################
 AnottateDrugsForthisCharacter <- function(mygenes){
   myquery <- queryDGIdb(mygenes)
-  return(detailedResults(myquery)[,c(1,3,4)])
+  return(detailedResults(myquery))
 }
 
 ##########################################################
 ### Reading the data #####################################
 ##########################################################
-Df_your_Dereg_Pw <- read.table( Path_to_your_Matrix, sep= "\t", header=TRUE, row.names = 1, quote = "" )
-PtwDf_defintions <- read.table( Path_to_Ptwydb , sep= "\t", header=TRUE, quote = "" , row.names = 1)
-DfDEG <- read.table( Path_your_DEG , sep= "\t", header=TRUE, quote = "" , row.names = 1)
+Df_your_Dereg_Pw <- read.table( Path_to_your_Matrix, sep= "\t", header=TRUE, row.names = 1, quote = "" , stringsAsFactors = FALSE)
+PtwDf_defintions <- read.table( Path_to_Ptwydb , sep= "\t", header=TRUE, quote = "" , row.names = 1 , stringsAsFactors = FALSE)
+DfDEG <- read.table( Path_your_DEG , sep= "\t", header=TRUE, quote = "" , row.names = 1, stringsAsFactors = FALSE)
 # Deleting the indicator row (of "Normal") in DEG data frame
 NORMALpos <- which(rownames(DfDEG) %in% "NORMAL")
 DfDEG <- DfDEG[ -NORMALpos,]
@@ -69,6 +69,7 @@ Df_yourPw_with_genes <- PtwDf_defintions[Coincident_positions, ]
 ##########################################################
 list_GnDg <-apply(Df_yourPw_with_genes ,1 ,AnottateDrugsForthisCharacter)
 Bigdf <- ldply(list_GnDg, data.frame) # Making a big data.frame
+Bigdf <- Bigdf[,c(1,2,4,5)]
 colnames(Bigdf)[1:2] <- c("Pathway", "Target")
 ##########################################################
 ###### Adding log2FC and DGE padj column 
