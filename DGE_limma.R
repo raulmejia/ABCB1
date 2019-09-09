@@ -77,11 +77,11 @@ samples <-Labels$Labels
 # check factors have been assigned
 samples
 #######################
- positions <- which( rownames(Labels) %in% colnames(New_Exp_Mat) )
+ positions <- which( rownames(Labels) %in% colnames(Exp_Mat) )
  NewLabels <- Labels[positions,]
  NewLabels <- droplevels(NewLabels)
  DfNewLabels <- data.frame(NewLabels)
- rownames( DfNewLabels ) <- colnames(New_Exp_Mat)
+ rownames( DfNewLabels ) <- colnames(Exp_Mat)
  head(DfNewLabels)
  samples <- DfNewLabels$NewLabels
 
