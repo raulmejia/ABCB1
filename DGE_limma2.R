@@ -103,9 +103,9 @@ Exp_Mat <- Exp_Mat[-normals_pos ,]
    DGEs<-topTable(huvec_ebFit, coef=colnames(contrast.matrix)[i], number=10000, p.value = mypvalue, lfc = mylfc)
    DGEs<-DGEs[order(rownames(DGEs)),]
    # Saving the matrix
-   write.table(DGEs, paste(Path_of_Results ,"DGE_",Label_for_results, mypvalue, mylfc, colnames(contrast.matrix)[i], "_ID_with_ILMN.txt", sep=""), sep="\t", quote=FALSE)
+   write.table(DGEs[,c(1,5)], paste(Path_of_Results ,"DGE_",Label_for_results, mypvalue, mylfc, colnames(contrast.matrix)[i], "_ID_with_ILMN.txt", sep=""), sep="\t", quote=FALSE, col.names = TRUE, row.names = TRUE)
    # Saving with no ILMN_ identifiers
-   write.table(DGEs[!grepl("ILMN_",rownames(DGEs)),], paste(Path_of_Results ,"DGE_",Label_for_results, mypvalue, mylfc, colnames(contrast.matrix)[i], "_ID_no_ILMN_.txt", sep=""), sep="\t", quote=FALSE)
+   write.table(DGEs[,c(1,5)][!grepl("ILMN_",rownames(DGEs[,c(1,5)])),], paste(Path_of_Results ,"DGE_",Label_for_results, mypvalue, mylfc, colnames(contrast.matrix)[i], "_ID_no_ILMN_.txt", sep=""), sep="\t", quote=FALSE, col.names = TRUE, row.names = TRUE)
    results_only_affys[[i]]<-DGEs
  }
  saveRDS(results_only_affys,file= paste(Path_of_Results ,"DGE_",Label_for_results, mypvalue, mylfc, colnames(contrast.matrix)[i], "_ID_with_ILMN.RDS", sep=""))

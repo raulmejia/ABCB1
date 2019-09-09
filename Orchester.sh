@@ -78,23 +78,13 @@ Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/Matrices_splited_
 
 Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_low.tsv ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_05
 
-Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_low.tsv ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_05
+Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_low.tsv ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_under_per50_lfc0_6_padj0_05
 
-Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_high.tsv ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_05
+Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_high.tsv ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_above_per50_lfc0_6_padj0_05
 
-Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_05
-
-
+Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_above_per75_lfc0_6_padj0_05
 
 
-
-Rscript DGE_limma.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_low.tsv ../Data/Labels_Ctrl_and_NL_Recal_separated_METABRIC.txt ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_05
-
-Rscript DGE_limma.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_low.tsv ../Data/Labels_Ctrl_and_NL_Recal_separated_METABRIC.txt ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_05
-
-Rscript DGE_limma.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_high.tsv ../Data/Labels_Ctrl_and_NL_Recal_separated_METABRIC.txt ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_05
-
-Rscript DGE_limma.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ../Data/Labels_Ctrl_and_NL_Recal_separated_METABRIC.txt ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_05
 
 
 ## Big DF Pathway Target Drug Interaction LogFC 
