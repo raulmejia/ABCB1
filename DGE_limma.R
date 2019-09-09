@@ -6,7 +6,7 @@
 ################################################################################
 args <- commandArgs(trailingOnly = TRUE)
 exp_mat_path <-args[1]
-# exp_mat_path <-c("../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_low.tsv") ; Labels_path <-c("../Data/Labels_Ctrl_and_NL_Recal_separated_METABRIC.txt") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/DEG/METABRIC/") ; mypvalue = 0.05 ; mylfc = 0.6 ; Label_for_results <-"METABRIC_some_LumAs_vs_Controls_"  
+# exp_mat_path <-c("../Data/toyMETABRIC_Controls_LumA.txt") ; Labels_path <-c("../Data/Labels_Ctrl_and_NL_Recal_separated_METABRIC.txt") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/DEG/METABRIC/") ; mypvalue = 0.05 ; mylfc = 0.6 ; Label_for_results <-"METABRIC_some_LumAs_vs_Controls_"  
 # exp_mat_path <- c("../Data/joined_indicator_METABRIC.txt")  
 Labels_path <-args[2]
 Path_of_Code <-args[3]
@@ -53,7 +53,7 @@ if (!require("org.Hs.eg.db")) {
 # Load the data frame (expression matrix)
 Exp_Mat <- read.table(exp_mat_path ,header=TRUE , sep="\t")
 # New_Exp_Mat <- cbind( Exp_Mat[,1:10] , Exp_Mat[, c(145,147,148, 150, 156, 158, 159, 160, 163, 164, 165, 166)])
-
+# dim(Exp_Mat); write.table( New_Exp_Mat , file = "../Data/toyMETABRIC_Controls_LumA.txt", sep="\t", quote=FALSE ,col.names = TRUE)
 # Load the annotation data to extract subtypes
 Labels <-read.table(Labels_path)
 
