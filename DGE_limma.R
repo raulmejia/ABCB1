@@ -6,15 +6,15 @@
 ################################################################################
 args <- commandArgs(trailingOnly = TRUE)
 exp_mat_path <-args[1]
-# exp_mat_path <-c("../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_low.tsv") ; Labels_path <-c("../Data/Labels_Ctrl_and_NL_Recal_separated_METABRIC.txt") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/DEG/METABRIC/") ; Label_for_results <-"METABRIC_some_LumAs_vs_Controls_" ; Filter_value <- 3; mypvalue = 0.05 ; mylfc = 0.6 
+# exp_mat_path <-c("../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_low.tsv") ; Labels_path <-c("../Data/Labels_Ctrl_and_NL_Recal_separated_METABRIC.txt") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/DEG/METABRIC/") ; mypvalue = 0.05 ; mylfc = 0.6 ; Label_for_results <-"METABRIC_some_LumAs_vs_Controls_"  
 # exp_mat_path <- c("../Data/joined_indicator_METABRIC.txt")  
 Labels_path <-args[2]
 Path_of_Code <-args[3]
 Path_of_Results <-args[4]
-Label_for_results <-args[5]
-Filter_value <- args[6] # Filter low value genes # METABRIC = 3
-mypvalue <- args[7]
-mylfc <- args[8]
+mylfc <-args[5]
+mypvalue <- args[6]
+Label_for_results <- args[7]
+#Filter_value <- args[6] # Filter low value genes # METABRIC = 3
 
 ###############################################################################
 ### Installing and/or loading required packages
