@@ -1,4 +1,3 @@
-
 ##############################
 #######
 ####### TCGA
@@ -25,6 +24,16 @@ Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/Matrices_split
 
 Rscript Pathifier_Args_10stabilizing_Filtervalue3_75.R ../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/Basal/TCGA/ TCGA_Basal_above_percentile_75_stbl_10
 
+# spliting pathifier's matrices
+for names in ../Results/Pathifier/Basal/TCGA/TCGA_Basal_*median_PDSz_ordered_matrix.txt  ; do
+new_names=${names%_.tsv}
+	head -n 30 $names > $new_names"_top_30.tsv"
+	head -n 40 $names > $new_names"_top_40.tsv"
+	head -n 50 $names > $new_names"_top_50.tsv"
+	echo $new_names;
+done;
+
+
 ####################################
 ## DGE genes
 ####################################
@@ -38,11 +47,20 @@ Rscript DESeq2_with_log2_transformed_data_only.R ../Results/Matrices_splited_by_
 
 Rscript DESeq2_with_log2_transformed_data_only.R ../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ../Data/Labels_Controls_and_Normal_separated_TCGA.txt ./ ../Results/DEG/TCGA/log2only/ _DGE_TCGA_Basal_ABCB1_above_per75_only_log2transformed_of0_6_padjof0_05 0.6 0.05 7
 
-## Big DF Pathway Target Drug Interaction LogFC 
+#########################################################
+## Big DF Pathway Target Drug Interaction LogFC  ########
+#########################################################
 
-Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix_Top20.txt ../Results/DEG/TCGA/log2only/padj10_3_lfc1_results_DESeq_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed_lfc2_of0_6_padjof0_05.tsv ./ ../Results/BigDfPTD/TCGA/ TCGA_Basal_under_percentile_25_top20_DEG_log2only
+Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix_Top20.txt ../Results/DEG/TCGA/log2only/padj10_3_lfc1_results_DESeq_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed_lfc2_of0_6_padjof0_05.tsv ./ ../Results/BigDfPTD/TCGA/ TCGA_Basal_under_percentile_25_top20_DEG_log2only # top 20
 
 --- Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix_Top20.txt ../Results/DEG/TCGA/log2only/padj10_3_lfc1_results_DESeq_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed_lfc2_of0_6_padjof0_05.tsv ./ ../Results/BigDfPTD/TCGA/ TCGA_Basal_under_percentile_25_top20_DEG_log2only
+
+Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix.txt_top_50.tsv ../Results/DEG/TCGA/log2only/padj10_3_lfc1_results_DESeq_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed_lfc2_of0_6_padjof0_05.tsv ./ ../Results/BigDfPTD/TCGA/ TCGA_Basal_under_percentile_25_top50_DEG_log2only # top 50
+
+--- Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/TCGA/TCGA_Basal_above_percentile_50_stbl_10_median_PDSz_ordered_matrix.txt ../Results/DEG/TCGA/log2only/padj10_3_lfc1_results_DESeq_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed_lfc2_of0_6_padjof0_05.tsv ./ ../Results/BigDfPTD/TCGA/ TCGA_Basal_under_percentile_25_topALL_DEG_log2only # ALL pathifier pathways 
+
+##### Above 75
+Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/TCGA/TCGA_Basal_above_percentile_75_stbl_10_median_PDSz_ordered_matrix.txt_top_50.tsv ../Results/DEG/TCGA/log2only/padj10_3_lfc1_results_DESeq_DGE_TCGA_Basal_ABCB1_above_per75_only_log2transformed_of0_6_padjof0_05.tsv ./ ../Results/BigDfPTD/TCGA/ TCGA_Basal_above_percentile_75_top50_DEG_log2only # top 50 above 75
 
 ####################
 ####################
@@ -69,6 +87,14 @@ Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/Matrices_splited_
 
 Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ./ ../Results/Pathifier/Basal/METABRIC/ METABRIC_Basal_above_percentile_75_stbl_10
 
+for names in ../Results/Pathifier/Basal/METABRIC/METABRIC_Basal_*median_PDSz_ordered_matrix.txt  ; do
+new_names=${names%_.tsv}
+	head -n 30 $names > $new_names"_top_30.tsv"
+	head -n 40 $names > $new_names"_top_40.tsv"
+	head -n 50 $names > $new_names"_top_50.tsv"
+	echo $new_names;
+done;
+
 
 ####################################
 ## DGE genes
@@ -89,7 +115,11 @@ Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_sp
 
 ## Big DF Pathway Target Drug Interaction LogFC 
 
-Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix_Top20.txt ../Results/DEG/TCGA/log2only/padj10_3_lfc1_results_DESeq_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed_lfc2_of0_6_padjof0_05.tsv ./ ../Results/BigDfPTD/METABRIC/ METABRIC_Basal_under_percentile_25_top20_DEG_log2only
+Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/METABRIC/METABRIC_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix.txt_top_50.tsv ../Results/DEG/METABRIC/DGE_METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_050.050.6Case_Controls_ID_no_ILMN_.txt ./ ../Results/BigDfPTD/METABRIC/ METABRIC_Basal_under_percentile_25_top50_DEG_0_05_lfc0_6
+
+Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/METABRIC/METABRIC_Basal_above_percentile_75_stbl_10_median_PDSz_ordered_matrix.txt_top_50.tsv ../Results/DEG/METABRIC/DGE_METABRIC_Basal_ABCB1_above_per75_lfc0_6_padj0_050.050.6Case_Controls_ID_no_ILMN_.txt ./ ../Results/BigDfPTD/METABRIC/ METABRIC_Basal_above_percentile_75_top50_DEG_0_05_lfc0_6
+
+
 
 
 Rscript DGE_limma2.R ../Data/toyMETABRIC_Controls_LumA.txt ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_toy_Normals_LumisA
