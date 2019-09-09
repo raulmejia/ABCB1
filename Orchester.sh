@@ -72,6 +72,7 @@ Rscript Pathifier_Args_10stabilizing_Filtervalue3.R ../Results/Matrices_splited_
 ## DGE genes
 ####################################
 ## only log 2 transformed
+Usar limma en lugar de DESeq2
 
 Rscript DESeq2_with_log2_transformed_data_only.R ../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_low.tsv ../Data/Labels_Controls_and_Normal_separated_TCGA.txt ./ ../Results/DEG/TCGA/log2only/ _DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed_lfc2_of0_6_padjof0_05 0.6 0.05 7
 
