@@ -123,6 +123,13 @@ Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Result
 
 
 
+################################
+### Lehmann's subtypes
+#################################
+Rscript Lehmann_subtypes.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv ./ ../Results/Lehmann-STROMA4/METABRIC/ METABRIC-only-Basals-lehmann_s_and_properties no 7 
+
+
+
 Rscript DGE_limma2.R ../Data/toyMETABRIC_Controls_LumA.txt ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_toy_Normals_LumisA
 
 
