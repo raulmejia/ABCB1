@@ -1,8 +1,9 @@
 # this program extract the rows of a matrix that match with a certain pattern
 # 1) folder_to_search
-# 2) patter_of_your_matrices
-# 3) patter_of_your genes
+# 2) pattern_of_your_matrices
+# 3) pattern_of_your genes
 # 4) Label_for save you results
+
 
 find $1 -name $2 -exec sh -c 'awk "NR==1 || /'"$3"'/"  {} > {}_'"$4"'_genes.tsv' \;
 

@@ -70,15 +70,15 @@ heatmap.2(MyMatrix,
           col = my_palette,        # use on color palette defined earlier
           #Rowv = as.dendrogram(row.cluster), # apply selected clustering method
           Rowv = FALSE,
-          Colv = as.dendrogram(col.cluster), # apply selected clustering method
-          #Colv = FALSE,
+          #Colv = as.dendrogram(col.cluster), # apply selected clustering method
+          Colv = FALSE,
           keysize = 0.8,           # size of color key
           #Additional Options
           ## Color labeling columns (Opt. RowSideColors for rows)
          # ColSideColors =color_labels_vector ,       # Grouping col-samples into two different
           
           #    breaks= col_breaks,  # enable color transition at specified limits
-          dendrogram= "col",   # only draw a column dendrogram (opt. "row")
+          #dendrogram= "col",   # only draw a column dendrogram (opt. "row")
           cexRow = 0.2 + 1/log10(dim(MyMatrix)[1]),
           cexCol= 0.2 + 1/log10(dim(MyMatrix)[2])
           
