@@ -9,16 +9,13 @@ args <- commandArgs(trailingOnly = TRUE)
 
 ###########################################
 Path_to_your_Matrix<-args[1] # The path to your matrix
-# Path_to_your_Matrix<-c("../Results/Splited/Matrices/TCGA/Subexpression_matrix_Basal_from_TCGA_.tsv_Only_ABC_transporters_genes.tsv")
+# Path_to_your_Matrix<-c("../Results/Splited/SubMatrices_with_controls/Control_with_subexpression_matrix_of_Basal_from_METABRIC_.tsv") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/Clusterig/") ; Labels <- "Basal_Only_ABC_transporters"
 # Path_to_your_Matrix <- choose.files() # choose.dir()
 Path_of_Code<-args[2] # The path to your code
-# Path_of_Code<-c("./")
 Path_of_Results<-args[3] # # where do you want to save your results?
-# Path_of_Results<-c("../Results/Clusterig/")
 # Path_of_Results <- choose.dir()
 # choose.dir(default = "", caption = "Select folder")
 Labels <-args[4] # Label for your results
-# Labels <- "Basal_Only_ABC_transporters"
 ###############################################################################
 ### Installing and/or loading required packages
 ###############################################################################
@@ -64,11 +61,13 @@ colnames(M.matrix_zscores) <- colnames(M.matrix)
 ###############################
 
 color_labels_vector <- rep("red",dim(M.matrix)[2]) # you can replace the color vector
+# color_labels_vector <- c(rep("green",sum(grepl(1,M.matrix["NORMALS",]))),rep("red", sum( grepl(0,M.matrix["NORMALS",] )) ) )
 M.matrix <- as.matrix(M.matrix)
-class(M.matrix)
+
 plot_raw_Matrix_png(M.matrix,paste0(Labels),paste0(Path_of_Results,Labels,c("_heatmap_clustering_euclidean_complete.png")),color_labels_vector)
 plot_raw_Matrix_png(M.matrix_zscores,paste0(Labels),paste0(Path_of_Results,Labels,c("_Z-scores_heatmap_clustering_euclidean_complete.png")),color_labels_vector)
 
-plot_raw_Matrix_png_ecuclidean_wardD2(M.matrix,paste0(Labels),paste0(Path_of_Results,Labels,c("_heatmap_clustering_euclidean_wardD2.png")),color_labels_vector)
-plot_raw_Matrix_png_ecuclidean_wardD2(M.matrix_zscores,paste0(Labels),paste0(Path_of_Results,Labels,c("_Z-scores_heatmap_clustering_euclidean_wardD2.png")),color_labels_vector)
+
+plot_raw_Matrix_png_ecuclidean_wardD2(M.matrix,paste0(Labels),paste0(Path_of_Results,Labels,c("_heatmap_clustering_euclidean_wardD2.png")),color_labels_vector,Path_of_Results)
+plot_raw_Matrix_png_ecuclidean_wardD2(M.matrix_zscores,paste0(Labels),paste0(Path_of_Results,Labels,c("_Z-scores_heatmap_clustering_euclidean_wardD2.png")),color_labels_vector,Path_of_Results)
 

@@ -12,7 +12,7 @@ if (!require("gplots")) {
 plot_raw_Matrix_png_ecuclidean_wardD2 <- function(MyMatrix,PlotTitle,Pathtosave,mycolorside){
   # This function takes a matrix, convert it in z-scores by row; plot and save  both in several formats. png and .svg 
   
-
+# MyMatrix <- M.matrix ; PlotTitle <- paste0(Labels); Pathtosave <- paste0(Path_of_Results,Labels,c("_heatmap_clustering_euclidean_wardD2.png"))  ; mycolorside <- color_labels_vector ; PathformoreResults <- Path_of_Results
 ###############################################################################
 ## Creating Custom Palette
 ###############################################################################
@@ -36,7 +36,8 @@ my_palette <- colorRampPalette(c("blue", "cyan", "chartreuse1", "yellow",
 
 row.distance = dist(MyMatrix, method = "euclidean")
 row.cluster = hclust(row.distance, method = "ward.D2")
-
+write.table(, file =  paste0(Pathtosave,"_Row_cluster.tsv"), sep="\t", quote = FALSE)
+?write.table()
 col.distance = dist(t(MyMatrix), method = "euclidean")
 col.cluster = hclust(col.distance, method = "ward.D2")
 
@@ -55,7 +56,7 @@ col.cluster = hclust(col.distance, method = "ward.D2")
 ## Plotting the Heatmap!! (where all colorful things happen...)
 ###############################################################################
 
-png(Pathtosave, # Name of png file
+png( Pathtosave , # Name of png file
     width = 6 * 500,      # Easier scaling 6*500 = 3000 pixels
     height = 6 * 400,     # 6 x 400 = 2400 px
     units = "px",         # px (Pixels = default), in (inches), cm or mm

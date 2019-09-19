@@ -115,10 +115,34 @@ Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_sp
 
 
 ## Big DF Pathway Target Drug Interaction LogFC 
-
 Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/METABRIC/METABRIC_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix.txt_top_50.tsv ../Results/DEG/METABRIC/DGE_METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_050.050.6Case_Controls_ID_no_ILMN_.txt ./ ../Results/BigDfPTD/METABRIC/ METABRIC_Basal_under_percentile_25_top50_DEG_0_05_lfc0_6
 
 Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/METABRIC/METABRIC_Basal_above_percentile_75_stbl_10_median_PDSz_ordered_matrix.txt_top_50.tsv ../Results/DEG/METABRIC/DGE_METABRIC_Basal_ABCB1_above_per75_lfc0_6_padj0_050.050.6Case_Controls_ID_no_ILMN_.txt ./ ../Results/BigDfPTD/METABRIC/ METABRIC_Basal_above_percentile_75_top50_DEG_0_05_lfc0_6
+
+
+################################
+### Lehmann's subtypes
+#################################
+Rscript Lehmann_subtypes_numerical_results.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv ./ ../Results/Lehmann-STROMA4/METABRIC/ METABRIC-only-Basals-lehmann_s_and_properties no 7 
+
+Rscript Lehmann_subtypes_numerical_results.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv ./ ../Results/Lehmann-STROMA4/METABRIC/ METABRIC-only-Basals-lehmann_s_and_properties no 7 
+
+################################
+### Clustering of ABC genes
+################################
+sh grep_gene_patterns_from_ExpMat.sh ../Results/Splited/Submatrices_ohne_controls/ Subexpression_matrix*Basal*.tsv ABC only_ABC_transporters # Extracting only the ABC transporter genes
+
+
+
+Subexpression_matrix*Basal*TCGA*only_ABC_transporters*
+
+Heatmaping_hc_with_and_without_zscores.R 
+
+
+
+
+
+
 
 
 
