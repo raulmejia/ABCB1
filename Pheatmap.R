@@ -10,10 +10,9 @@ Path_to_your_Matrix<-args[1] # The path to your matrix
 Path_to_myPhenoData <- args[2] # The path to your Feature data
 Path_of_Code<-args[3] # The path to your code
 Path_of_Results<-args[4] # # where do you want to save your results?
-Labels <-args[4] # Label for your results
+Labels <-args[5] # Label for your results
 # Path_to_your_Matrix<-c("../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv") ; Path_to_myPhenoData <- c("../Results/Lehmann-STROMA4/METABRIC/Lehmann\'s_Subt_and_properties_Numerical_METABRIC-only-Basals-lehmann_s_and_properties.tsv") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/") ; Labels <- "Heatmap_METABRIC_Basal_ABC_transporters_Lehmann"
 # Path_to_your_Matrix <- choose.files() # choose.dir()
-
 
 ###############################################################################
 ### Installing and/or loading required packages
@@ -56,8 +55,9 @@ M.matrix<-read.table(Path_to_your_Matrix,header=TRUE,row.names = 1)
 ## Feature 
 myPhenoData <-read.table(Path_to_myPhenoData ,header=TRUE,row.names = 1)
 myPhenoData <- as.data.frame(myPhenoData )
-My_pData_Anotdf <- AnnotatedDataFrame( data=myFeatureData)
-validObject(My_fData_Anotdf)
+My_pData_Anotdf <- AnnotatedDataFrame( data= myPhenoData)
+validObject( My_pData_Anotdf )
+
 ##################################
 ### Building ExpressionSet Object
 ##################################
@@ -66,8 +66,59 @@ myExpressionSet <- ExpressionSet(as.matrix( M.matrix ), phenoData= My_pData_Anot
 ########################
 ### Pheatmap
 ########################
+mymin <- min(exprs( myExpressionSet ))
+mymax <- max(exprs( myExpressionSet ))
+mydim <- dim(rowCenter(Biobase::exprs( myExpressionSet )))[2]
+head(pData(myExpressionSet))
 
-topGenes = order(rowVars(Biobase::exprs(x)), decreasing = TRUE)[1:500]
+rowCenter = function(x) { x - rowMeans(x) } # Defining a function that only make the 
+
+
+pheatmap( rowCenter(Biobase::exprs( myExpressionSet ) ),
+          show_rownames = FALSE, show_colnames = FALSE,
+          breaks = seq(mymin, mymax, length = mydim+1 ),
+          annotation_col =
+            pData(myExpressionSet)[,c("MSL.property","M.property","LAR.property","IM.property","BL1.property","BL2.property")],
+          annotation_colors = list(
+            MSL.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            LAR.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            IM.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            BL1.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            BL2.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+          ),
+          cutree_rows = 4
+)
+
+
+
+
+
+
+
+
+pheatmap( rowCenter(Biobase::exprs( myExpressionSet ) ),
+          show_rownames = FALSE, show_colnames = FALSE,
+          breaks = seq(mymin, mymax, length = mydim+1 ),
+          annotation_col =
+            pData(myExpressionSet)[,c("D.stroma.property","B.stroma.property","T.stroma.property","E.stroma.property","MSL.property","M.property","LAR.property","IM.property","BL1.property","BL2.property")],
+          annotation_colors = list(
+            D.stroma.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            B.stroma.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            T.stroma.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            E.stroma.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            MSL.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            LAR.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            IM.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            BL1.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+            BL2.property = c(`1` = "red", `0` = "white", `-1` = "green"),
+          ),
+          cutree_rows = 4
+)
+
+data("x")
+dim( rowCenter(Biobase::exprs(x)[ topGenes, ]))
+class(topGenes)
+dim(topGenes)
 rowCenter = function(x) { x - rowMeans(x) }
 ?pheatmap
 max(rowCenter(Biobase::exprs(x)[ topGenes, ]))
@@ -83,6 +134,10 @@ groups
 groupColor = setNames(groups$color, groups$sampleGroup)
 vignette("programming")
 ?pheatmap
+
+
+
+
 pheatmap( rowCenter(Biobase::exprs(x)[ topGenes, ] ),
           show_rownames = FALSE, show_colnames = FALSE,
           breaks = seq(-5, +5, length = 101),
