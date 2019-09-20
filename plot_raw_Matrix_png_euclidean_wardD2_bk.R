@@ -82,7 +82,7 @@ heatmap.2(MyMatrix,
          ColSideColors = mycolorside ,       # Grouping col-samples into two different
           
           #    breaks= col_breaks,  # enable color transition at specified limits
-          dendrogram= "both",   # only draw a column dendrogram (opt. "row")
+          dendrogram= "col",   # only draw a column dendrogram (opt. "row")
           cexRow = 0.2 + 1/log10(dim(MyMatrix)[1]),
           cexCol= 0.2 + 1/log10(dim(MyMatrix)[2])
           

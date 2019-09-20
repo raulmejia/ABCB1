@@ -9,7 +9,8 @@ args <- commandArgs(trailingOnly = TRUE)
 
 ###########################################
 Path_to_your_Matrix<-args[1] # The path to your matrix
-# Path_to_your_Matrix<-c("../Results/Splited/SubMatrices_with_controls/Control_with_subexpression_matrix_of_Basal_from_METABRIC_.tsv") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/Clusterig/") ; Labels <- "Basal_Only_ABC_transporters"
+# Path_to_your_Matrix<-c("../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/Clusterig/") ; Labels <- "METABRIC_Only_Basal_Only_ABC_transporters"
+# Path_to_your_Matrix<-c("Control_with_subexpression_matrix_of_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv")
 # Path_to_your_Matrix <- choose.files() # choose.dir()
 Path_of_Code<-args[2] # The path to your code
 Path_of_Results<-args[3] # # where do you want to save your results?
@@ -49,25 +50,34 @@ source(paste0(Path_of_Code,"plot_raw_Matrix_png_euclidean_wardD2.R"))
 dir.create(Path_of_Results , recursive = TRUE )
 M.matrix<-read.table(Path_to_your_Matrix,header=TRUE,row.names = 1)
 
+################################
+###### Labels for Ploting
+###############################
+
+if( length( which(rownames(M.matrix) %in% "NORMALS") ) == 1 ){
+  color_labels_vector <- M.matrix["NORMALS",]
+  color_labels_vector <- gsub( 1 , "green" , color_labels_vector )
+  color_labels_vector <- gsub( 0 , "red" , color_labels_vector )
+}else{
+  color_labels_vector <- rep("red",dim(M.matrix)[2])
+}
+
 ############################
 ####### Preparing the data
 ############################
+if( length( which(rownames(M.matrix) %in% "NORMALS") ) == 1 ){
+  pos_Normals <- which( rownames(M.matrix) %in% "NORMALS")
+  M.matrix <- M.matrix[ -pos_Normals, ]
+}
 # calculating z-scores
-M.matrix_zscores<-som::normalize(M.matrix, byrow = TRUE)
+M.matrix_zscores <- som::normalize(M.matrix, byrow = TRUE)
 colnames(M.matrix_zscores) <- colnames(M.matrix)
-
-################################
-###### Ploting
-###############################
-
-color_labels_vector <- rep("red",dim(M.matrix)[2]) # you can replace the color vector
-# color_labels_vector <- c(rep("green",sum(grepl(1,M.matrix["NORMALS",]))),rep("red", sum( grepl(0,M.matrix["NORMALS",] )) ) )
 M.matrix <- as.matrix(M.matrix)
 
 plot_raw_Matrix_png(M.matrix,paste0(Labels),paste0(Path_of_Results,Labels,c("_heatmap_clustering_euclidean_complete.png")),color_labels_vector)
 plot_raw_Matrix_png(M.matrix_zscores,paste0(Labels),paste0(Path_of_Results,Labels,c("_Z-scores_heatmap_clustering_euclidean_complete.png")),color_labels_vector)
 
 
-plot_raw_Matrix_png_ecuclidean_wardD2(M.matrix,paste0(Labels),paste0(Path_of_Results,Labels,c("_heatmap_clustering_euclidean_wardD2.png")),color_labels_vector,Path_of_Results)
-plot_raw_Matrix_png_ecuclidean_wardD2(M.matrix_zscores,paste0(Labels),paste0(Path_of_Results,Labels,c("_Z-scores_heatmap_clustering_euclidean_wardD2.png")),color_labels_vector,Path_of_Results)
+plot_raw_Matrix_png_ecuclidean_wardD2(M.matrix,paste0(Labels),paste0(Path_of_Results,Labels,c("_heatmap_clustering_euclidean_wardD2.png")),color_labels_vector)
+plot_raw_Matrix_png_ecuclidean_wardD2(M.matrix_zscores,paste0(Labels),paste0(Path_of_Results,Labels,c("_Z-scores_heatmap_clustering_euclidean_wardD2.png")),color_labels_vector)
 
