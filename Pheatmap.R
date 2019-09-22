@@ -9,9 +9,9 @@ args <- commandArgs(trailingOnly = TRUE)
 Path_to_your_Matrix<-args[1] # The path to your matrix
 Path_to_myPhenoData <- args[2] # The path to your Feature data
 Path_of_Code<-args[3] # The path to your code
-Path_of_Results<-args[4] # # where do you want to save your results?
+Path_of_Results <-args[4] # # where do you want to save your results?
 Labels <-args[5] # Label for your results
-# Path_to_your_Matrix<-c("../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv") ; Path_to_myPhenoData <- c("../Results/Lehmann-STROMA4/METABRIC/Lehmann\'s_Subt_and_properties_Numerical_METABRIC-only-Basals-lehmann_s_and_properties.tsv") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/") ; Labels <- "Heatmap_METABRIC_Basal_ABC_transporters_Lehmann"
+# Path_to_your_Matrix<-c("../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv") ; Path_to_myPhenoData <- c("../Results/Lehmann-STROMA4/METABRIC/Lehmann\'s_Subt_and_properties_Numerical_METABRIC-only-Basals-lehmann_s_and_properties.tsv") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/") ; Labels <- "Heatmap_METABRIC_Basal_ABC_transporters_Lehmann_clasification"
 # Path_to_your_Matrix <- choose.files() # choose.dir()
 
 ###############################################################################
@@ -45,6 +45,10 @@ if (!require("dplyr")) {
   BiocManager::install("dplyr", dependencies = TRUE)
   library(dplyr)
 }
+if (!require("som")) {
+  install.packages("som", dependencies = TRUE)
+  library(som)
+}
 
 ########################
 ### Reading the data and creating the folder for the results
@@ -66,93 +70,66 @@ myExpressionSet <- ExpressionSet(as.matrix( M.matrix ), phenoData= My_pData_Anot
 ########################
 ### Pheatmap
 ########################
+rowCenter = function(x) { x - rowMeans(x) } # Defining a function that only make the 
+PDSmatrix_zscores <- som::normalize( Biobase::exprs( myExpressionSet ) , byrow = TRUE)
+colnames(PDSmatrix_zscores) <- colnames( Biobase::exprs( myExpressionSet ))
+
 mymin <- min(exprs( myExpressionSet ))
 mymax <- max(exprs( myExpressionSet ))
 mydim <- dim(rowCenter(Biobase::exprs( myExpressionSet )))[2]
-head(pData(myExpressionSet))
 
-rowCenter = function(x) { x - rowMeans(x) } # Defining a function that only make the 
-
-
-pheatmap( rowCenter(Biobase::exprs( myExpressionSet ) ),
-          show_rownames = FALSE, show_colnames = FALSE,
-          breaks = seq(mymin, mymax, length = mydim+1 ),
-          annotation_col =
-            pData(myExpressionSet)[,c("MSL.property","M.property","LAR.property","IM.property","BL1.property","BL2.property")],
-          annotation_colors = list(
-            MSL.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            LAR.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            IM.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            BL1.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            BL2.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-          ),
-          cutree_rows = 4
+pdf( file = paste0(Path_of_Results,Labels,"_Z-scores_Euclidean_wardD2.pdf"))
+pheatmap(  PDSmatrix_zscores,
+           show_rownames = TRUE, show_colnames = FALSE,
+           method = c("euclidean"),
+           clustering_method = "ward.D2",
+           fontsize = 7,
+           main = gsub("_"," ",Labels),
+           #breaks = seq(mymin, mymax, length = mydim+1 ),
+           annotation_col =
+             pData(myExpressionSet)[,c("D.stroma.property","B.stroma.property","T.stroma.property","E.stroma.property","MSL.property","M.property","LAR.property","IM.property","BL1.property","BL2.property")],
+           annotation_colors = list(
+             #D.stroma.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #B.stroma.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #T.stroma.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #E.stroma.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #MSL.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #M.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #LAR.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #IM.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #BL1.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #BL2.property = c(`1` = "black", `0` = "gray", `-1` = "white")
+           ),
+           cutree_rows = 4,
+           cutree_cols = 4
 )
+dev.off()
 
 
-
-
-
-
-
-
-pheatmap( rowCenter(Biobase::exprs( myExpressionSet ) ),
-          show_rownames = FALSE, show_colnames = FALSE,
-          breaks = seq(mymin, mymax, length = mydim+1 ),
-          annotation_col =
-            pData(myExpressionSet)[,c("D.stroma.property","B.stroma.property","T.stroma.property","E.stroma.property","MSL.property","M.property","LAR.property","IM.property","BL1.property","BL2.property")],
-          annotation_colors = list(
-            D.stroma.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            B.stroma.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            T.stroma.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            E.stroma.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            MSL.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            LAR.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            IM.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            BL1.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-            BL2.property = c(`1` = "red", `0` = "white", `-1` = "green"),
-          ),
-          cutree_rows = 4
+pdf( file = paste0(Path_of_Results,Labels,"_Row_Center_Euclidean_wardD2.pdf") )
+#png(file = paste0(Path_of_Results,Labels,"_Row_Center_Euclidean_wardD2.png"),width = 480, height = 480, pointsize = 2)
+pheatmap(  rowCenter(Biobase::exprs( myExpressionSet )) ,
+           main = gsub("_"," ",Labels),
+           show_rownames = TRUE, show_colnames = FALSE,
+           method = c("euclidean"),
+           clustering_method = "ward.D2",
+           fontsize = 7,
+           #breaks = seq(mymin, mymax, length = mydim+1 ),
+           annotation_col =
+             pData(myExpressionSet)[,c("D.stroma.property","B.stroma.property","T.stroma.property","E.stroma.property","MSL.property","M.property","LAR.property","IM.property","BL1.property","BL2.property")],
+           annotation_colors = list(
+             #D.stroma.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #B.stroma.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #T.stroma.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #E.stroma.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #MSL.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #M.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #LAR.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #IM.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #BL1.property = c(`1` = "black", `0` = "gray", `-1` = "white"),
+             #BL2.property = c(`1` = "black", `0` = "gray", `-1` = "white")
+           ),
+           cutree_rows = 4,
+           cutree_cols = 4
 )
-
-data("x")
-dim( rowCenter(Biobase::exprs(x)[ topGenes, ]))
-class(topGenes)
-dim(topGenes)
-rowCenter = function(x) { x - rowMeans(x) }
-?pheatmap
-max(rowCenter(Biobase::exprs(x)[ topGenes, ]))
-min(rowCenter(Biobase::exprs(x)[ topGenes, ]))
-dim( rowCenter(Biobase::exprs(x)[ topGenes, ]))
-mtcars %>%
-  group_by(cyl) %>%
-  summarise(mean = mean(disp), n = n())
-?summarise
-groups = group_by(pData(x), sampleGroup) %>%
-  summarise(n = n(), color = unique(sampleColour))
-groups
-groupColor = setNames(groups$color, groups$sampleGroup)
-vignette("programming")
-?pheatmap
-
-
-
-
-pheatmap( rowCenter(Biobase::exprs(x)[ topGenes, ] ),
-          show_rownames = FALSE, show_colnames = FALSE,
-          breaks = seq(-5, +5, length = 101),
-          annotation_col =
-            pData(x)[, c("sampleGroup", "Embryonic.day", "ScanDate") ],
-          annotation_colors = list(
-            sampleGroup = groupColor,
-            genotype = c(`FGF4-KO` = "chocolate1", `WT` = "azure2"),
-            Embryonic.day = setNames(brewer.pal(9, "Blues")[c(3, 6, 9)],
-                                     c("E3.25", "E3.5", "E4.5")),
-            ScanDate = setNames(brewer.pal(nlevels(x$ScanDate), "YlGn"),
-                                levels(x$ScanDate))
-          ),
-          cutree_rows = 4
-)
-
-dir.create(Path_of_Results , recursive = TRUE )
-M.matrix<-read.table(Path_to_your_Matrix,header=TRUE,row.names = 1)
+dev.off()

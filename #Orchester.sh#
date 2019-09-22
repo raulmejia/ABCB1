@@ -111,14 +111,10 @@ Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_sp
 
 Rscript DGE_limma2.R ../Results/Matrices_splited_by_gene/ABCB1/METABRIC_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_Basal_ABCB1_above_per75_lfc0_6_padj0_05
 
-
-
-
 ## Big DF Pathway Target Drug Interaction LogFC 
 Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/METABRIC/METABRIC_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix.txt_top_50.tsv ../Results/DEG/METABRIC/DGE_METABRIC_Basal_ABCB1_under_per25_lfc0_6_padj0_050.050.6Case_Controls_ID_no_ILMN_.txt ./ ../Results/BigDfPTD/METABRIC/ METABRIC_Basal_under_percentile_25_top50_DEG_0_05_lfc0_6
 
 Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/METABRIC/METABRIC_Basal_above_percentile_75_stbl_10_median_PDSz_ordered_matrix.txt_top_50.tsv ../Results/DEG/METABRIC/DGE_METABRIC_Basal_ABCB1_above_per75_lfc0_6_padj0_050.050.6Case_Controls_ID_no_ILMN_.txt ./ ../Results/BigDfPTD/METABRIC/ METABRIC_Basal_above_percentile_75_top50_DEG_0_05_lfc0_6
-
 
 ################################
 ### Lehmann's subtypes
@@ -130,43 +126,29 @@ Rscript Lehmann_subtypes_numerical_results.R ../Results/Splited/Submatrices_ohne
 ################################
 ### Clustering of ABC genes
 ################################
+# Extracting only the ABC genes
 sh grep_gene_patterns_from_ExpMat.sh ../Results/Splited/Submatrices_ohne_controls/ Subexpression_matrix*Basal*.tsv ABC only_ABC_transporters # Extracting only the ABC transporter genes
 
+sh grep_gene_patterns_from_ExpMat.sh ../Results/Splited/SubMatrices_with_controls/ Control*ubexpression_matrix*Basal*.tsv ABC only_ABC_transporters # Extracting only the ABC transporter genes  Basal with Controls
 
+# Heatmap and clustering of that samples
+Rscript Heatmaping_hc_with_and_without_zscores.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv ./ ../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/ METABRIC_Only_Basal_Only_ABC_transporters
 
-Subexpression_matrix*Basal*TCGA*only_ABC_transporters*
-
-Heatmaping_hc_with_and_without_zscores.R 
-
-
-
-
-
-
-
-
+Rscript Pheatmap.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv ../Results/Lehmann-STROMA4/METABRIC/Lehmann\'s_Subt_and_properties_Numerical_METABRIC-only-Basals-lehmann_s_and_properties.tsv ./ ../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/ Heatmap_METABRIC_Basal_ABC_transporters_Lehmann_clasification
 
 
 Rscript DGE_limma2.R ../Data/toyMETABRIC_Controls_LumA.txt ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_toy_Normals_LumisA
 
 
-
-
 #grep -nr Breast ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix.txt ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_50_stbl_10_median_PDSz_ordered_matrix.txt ../Results/Pathifier/Basal/TCGA/TCGA_Basal_above_percentile_50_stbl_10_median_PDSz_ordered_matrix.txt ../Results/Pathifier/Basal/TCGA/TCGA_Basal_above_percentile_75_stbl_10_median_PDSz_ordered_matrix.txt 
-
 
 #for names in ../Results/Splited/SubMatrices_with_controls/Subexpression_matrix_*from_TCGA_.tsv ; do
 #new_names=${names%_.tsv}
 #	echo $new_names;
 #done;
 
-
-
-
-
 for names in ../Results/Splited/Matrices/Subexpression_matrix_*from_TCGA_.tsv ; do
 new_names=${names%_.tsv}
 	echo $new_names;
 done;
-
 

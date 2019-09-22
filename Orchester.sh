@@ -132,7 +132,10 @@ sh grep_gene_patterns_from_ExpMat.sh ../Results/Splited/Submatrices_ohne_control
 sh grep_gene_patterns_from_ExpMat.sh ../Results/Splited/SubMatrices_with_controls/ Control*ubexpression_matrix*Basal*.tsv ABC only_ABC_transporters # Extracting only the ABC transporter genes  Basal with Controls
 
 # Heatmap and clustering of that samples
-Rscript Heatmaping_hc_with_and_without_zscores.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv ./ ../Results/Clusterig/ METABRIC_Only_Basal_Only_ABC_transporters
+Rscript Heatmaping_hc_with_and_without_zscores.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv ./ ../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/ METABRIC_Only_Basal_Only_ABC_transporters
+
+Rscript Pheatmap.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv ../Results/Lehmann-STROMA4/METABRIC/Lehmann\'s_Subt_and_properties_Numerical_METABRIC-only-Basals-lehmann_s_and_properties.tsv ./ ../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/ Heatmap_METABRIC_Basal_ABC_transporters_Lehmann_clasification
+
 
 Rscript DGE_limma2.R ../Data/toyMETABRIC_Controls_LumA.txt ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_toy_Normals_LumisA
 
