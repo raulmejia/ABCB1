@@ -11,7 +11,8 @@ Path_to_myPhenoData <- args[2] # The path to your Feature data
 Path_of_Code<-args[3] # The path to your code
 Path_of_Results <-args[4] # # where do you want to save your results?
 Labels <-args[5] # Label for your results
-# Path_to_your_Matrix<-c("../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv") ; Path_to_myPhenoData <- c("../Results/Lehmann-STROMA4/METABRIC/Lehmann\'s_Subt_and_properties_Numerical_METABRIC-only-Basals-lehmann_s_and_properties.tsv") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/") ; Labels <- "Heatmap_METABRIC_Basal_ABC_transporters_Lehmann_clasification"
+log2transformation <- args[6] # Do you want log2transformation for your expression matrix ?
+# Path_to_your_Matrix<-c("../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv") ; Path_to_myPhenoData <- c("../Results/Lehmann-STROMA4/METABRIC/Lehmann\'s_Subt_and_properties_Numerical_METABRIC-only-Basals-lehmann_s_and_properties.tsv") ; Path_of_Code<-c("./") ; Path_of_Results<-c("../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/") ; Labels <- "Heatmap_METABRIC_Basal_ABC_transporters_Lehmann_clasification" ; log2transformation <- "log2-transformation-no" 
 # Path_to_your_Matrix <- choose.files() # choose.dir()
 
 ###############################################################################
@@ -56,15 +57,30 @@ if (!require("som")) {
 dir.create(Path_of_Results , recursive = TRUE )
 M.matrix<-read.table(Path_to_your_Matrix,header=TRUE,row.names = 1)
 
-## Feature 
-myPhenoData <-read.table(Path_to_myPhenoData ,header=TRUE,row.names = 1)
-myPhenoData <- as.data.frame(myPhenoData )
-My_pData_Anotdf <- AnnotatedDataFrame( data= myPhenoData)
-validObject( My_pData_Anotdf )
+# transforming your matrix to log2
+if( log2transformation == "log2-transformation-no"){
+  print("Your expression matrix has NOT being log2 Transformed by this program")
+  M.matrix[1:5,1:5]
+}else{
+  if( log2transformation == "log2-transformation-yes" ){
+    print("Your expression matrix has being log2 Transformed by this program")
+    M.matrix <- log(M.matrix+1)
+    M.matrix[1:5,1:5]
+  }else{
+    print("ERROR: Please type one option 'log2 transformation no' or 'log2 transformation no' ")
+    exit("no")
+  }  
+}
 
 ##################################
 ### Building ExpressionSet Object
 ##################################
+## PhenoData 
+myPhenoData <-read.table(Path_to_myPhenoData ,header=TRUE,row.names = 1)
+myPhenoData <- as.data.frame(myPhenoData )
+My_pData_Anotdf <- AnnotatedDataFrame( data= myPhenoData)
+validObject( My_pData_Anotdf )
+## ExpresisionSet
 myExpressionSet <- ExpressionSet(as.matrix( M.matrix ), phenoData= My_pData_Anotdf  )
 
 ########################

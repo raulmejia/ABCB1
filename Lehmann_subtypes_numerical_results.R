@@ -31,6 +31,7 @@ if (!require("Biobase")) {
 args <- commandArgs(trailingOnly = TRUE)
 Path_to_your_Matrix<-args[1] # The path to your matrix
 # Path_to_your_Matrix<-c("../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv") ; Path_of_Code<-c("./"); Path_of_Results<-c("../Results/Lehmann-STROMA4/METABRIC/"); Label_for_Results <-"METABRIC-only-Basals" ; Do_you_want_log2 <- "no" ; mymc.cores <- 7 
+# Path_to_your_Matrix<-c("../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_TCGA_.tsv") ;     Path_of_Code<-c("./"); Path_of_Results<-c("../Results/Lehmann-STROMA4/TCGA/"); Label_for_Results <-"TCGA-only-Basals" ; Do_you_want_log2 <- "yes" ; mymc.cores <- 7 
 Path_of_Code<-args[2] # The path to your code, scripts and so on ...
 Path_of_Results<-args[3] # where do you want to save your results?
 Label_for_Results<-args[4] # Label for your results
@@ -53,8 +54,15 @@ myeMatrix <- read.table( Path_to_your_Matrix, sep= "\t", header=TRUE, row.names 
 ########################################3
 #### Eliminating the indicator row, labeled as "NORMALS" and the rows with orphan id's "ILMN" 
 #########################################
-NormalPos <- which( rownames(myeMatrix) %in% "NORMALS")
-myeMatrix <- myeMatrix[-NormalPos,]
+if( length( which(rownames(myeMatrix) %in% "NORMALS") ) == 1 ){
+  pos_Normals <- which( rownames(myeMatrix) %in% "NORMALS")
+  myeMatrix <- myeMatrix[ -pos_Normals, ]
+}
+if( length( which(rownames(myeMatrix) %in% "NORMAL") ) == 1 ){
+  pos_Normals <- which( rownames(myeMatrix) %in% "NORMAL")
+  myeMatrix <- myeMatrix[ -pos_Normals, ]
+}
+
 ILMN_Pos <- grepl( "ILMN" , rownames(myeMatrix) )
 myeMatrix <- myeMatrix[!ILMN_Pos , ]
 

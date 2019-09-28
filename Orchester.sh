@@ -1,9 +1,15 @@
 ##############################
 #######
+####### MAINZ
+#######
+##############################
+Rscript getting_MAINZ_DB.R ../Results/Splited/Submatrices_ohne_controls/ ../Results/Lehmann-STROMA4/MAINZ/ ./ MAINZ-only-Basals  
+
+##############################
+#######
 ####### TCGA
 #######
 ##############################
-
 Rscript Split_matrix_by_labels.R ../Data/expMatrix_TCGA_cBioPortal_no_males_withindicator.txt ../Data/Labels_Controls_and_Normal_separated_TCGA.txt  ../Results/Splited/Submatrices_ohne_controls/ TCGA
 
 Rscript Controls_pasted_with_Submatrices_generated_by_labels.R ../Data/expMatrix_TCGA_cBioPortal_no_males_withindicator.txt ../Data/Labels_Controls_and_Normal_separated_TCGA.txt  ../Results/Splited/SubMatrices_with_controls/ TCGA
@@ -32,7 +38,6 @@ new_names=${names%_.tsv}
 	head -n 50 $names > $new_names"_top_50.tsv"
 	echo $new_names;
 done;
-
 
 ####################################
 ## DGE genes
@@ -121,23 +126,39 @@ Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Result
 #################################
 Rscript Lehmann_subtypes_numerical_results.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv ./ ../Results/Lehmann-STROMA4/METABRIC/ METABRIC-only-Basals-lehmann_s_and_properties no 7 
 
-Rscript Lehmann_subtypes_numerical_results.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv ./ ../Results/Lehmann-STROMA4/METABRIC/ METABRIC-only-Basals-lehmann_s_and_properties no 7 
+Rscript Lehmann_subtypes_numerical_results.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_TCGA_.tsv ./ ../Results/Lehmann-STROMA4/TCGA/ TCGA-only-Basals-lehmann_s_and_properties yes 7
 
 ################################
 ### Clustering of ABC genes
 ################################
 # Extracting only the ABC genes
-sh grep_gene_patterns_from_ExpMat.sh ../Results/Splited/Submatrices_ohne_controls/ Subexpression_matrix*Basal*.tsv ABC only_ABC_transporters # Extracting only the ABC transporter genes
+sh grep_gene_patterns_from_ExpMat.sh ../Results/Splited/Submatrices_ohne_controls/ Subexpression_matrix*Basal*.tsv ^ABC only_ABC_transporters # Extracting only the ABC transporter genes
 
-sh grep_gene_patterns_from_ExpMat.sh ../Results/Splited/SubMatrices_with_controls/ Control*ubexpression_matrix*Basal*.tsv ABC only_ABC_transporters # Extracting only the ABC transporter genes  Basal with Controls
+sh grep_gene_patterns_from_ExpMat.sh ../Results/Splited/SubMatrices_with_controls/ Control*ubexpression_matrix*Basal*.tsv ^ABC only_ABC_transporters # Extracting only the ABC transporter genes  Basal with Controls
 
 # Heatmap and clustering of that samples
-Rscript Heatmaping_hc_with_and_without_zscores.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv ./ ../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/ METABRIC_Only_Basal_Only_ABC_transporters
+Rscript Pheatmap.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv ../Results/Lehmann-STROMA4/METABRIC/Lehmann\'s_Subt_and_properties_Numerical_METABRIC-only-Basals-lehmann_s_and_properties.tsv ./ ../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/ Heatmap_METABRIC_Basal_ABC_transporters_Lehmann_clasification log2-transformation-no
 
-Rscript Pheatmap.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_METABRIC_.tsv_only_ABC_transporters_genes.tsv ../Results/Lehmann-STROMA4/METABRIC/Lehmann\'s_Subt_and_properties_Numerical_METABRIC-only-Basals-lehmann_s_and_properties.tsv ./ ../Results/Clusterig/METABRIC/Heatmaps/Basal_Only_ABCS/ Heatmap_METABRIC_Basal_ABC_transporters_Lehmann_clasification
+Rscript Pheatmap.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_TCGA_.tsv_only_ABC_transporters_genes.tsv ../Results/Lehmann-STROMA4/TCGA/Lehmann\'s_Subt_and_properties_Numerical_TCGA-only-Basals-lehmann_s_and_properties.tsv ./ ../Results/Clusterig/TCGA/Heatmaps/Basal_Only_ABCS/ Heatmap_TCGA_Basal_ABC_transporters_Lehmann_clasification log2-transformation-yes
+
+Rscript Pheatmap.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_MAINZ_HCGS_.tsv_only_ABC_transporters_genes.tsv ../Results/Lehmann-STROMA4/MAINZ/Lehmann\'s_Subt_and_properties_Numerical_MAINZ-only-Basals.tsv ./ ../Results/Clusterig/MAINZ/Heatmaps/Basal_Only_ABCS/ Heatmap_MAINZ_Basal_ABC_transporters_Lehmann_clasification log2-transformation-no
+
+Rscript Pheatmap.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_MAINZ_HCGS_collapsed.tsv_only_ABC_transporters_genes.tsv ../Results/Lehmann-STROMA4/MAINZ/Lehmann\'s_Subt_and_properties_Numerical_MAINZ-only-Basals.tsv ./ ../Results/Clusterig/MAINZ/Heatmaps/Basal_Only_ABCS/ Heatmap_MAINZ_Basal_ABC_transporters_Lehmann_clasification_collapsed_median log2-transformation-no
+
+Rscript Pheatmap.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_MAINZ_HCGS_er_neg_.tsv_only_ABC_transporters_genes.tsv ../Results/Lehmann-STROMA4/MAINZ/Lehmann\'s_Subt_and_properties_Numerical_MAINZ-only-Basalsreneg_.tsv ./ ../Results/Clusterig/MAINZ/Heatmaps/Basal_Only_ABCS/ Heatmap_MAINZ_Basal_ABC_transporters_Lehmann_clasification_erneg log2-transformation-no
+
+Rscript Pheatmap.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_MAINZ_HCGS_collapsed_er_neg.tsv_only_ABC_transporters_genes.tsv ../Results/Lehmann-STROMA4/MAINZ/Lehmann\'s_Subt_and_properties_Numerical_MAINZ-only-Basalsreneg_.tsv ./ ../Results/Clusterig/MAINZ/Heatmaps/Basal_Only_ABCS/ Heatmap_MAINZ_Basal_ABC_transporters_Lehmann_clasification_collapsed_medianerneg log2-transformation-no
+
+Rscript Pheatmap.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_MAINZ_HCGS_er_neg_ERBB_normal_.tsv_only_ABC_transporters_genes.tsv ../Results/Lehmann-STROMA4/MAINZ/Lehmann\'s_Subt_and_properties_Numerical_MAINZ-only-Basalsreneg_ERBB_normal_.tsv ./ ../Results/Clusterig/MAINZ/Heatmaps/Basal_Only_ABCS/ Heatmap_MAINZ_Basal_ABC_transporters_Lehmann_clasification_ERBB_Normal_erneg_ log2-transformation-no
+
+Rscript Pheatmap.R ../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_MAINZ_HCGS_collapsed_er_neg_ERBB_normal_.tsv_only_ABC_transporters_genes.tsv ../Results/Lehmann-STROMA4/MAINZ/Lehmann\'s_Subt_and_properties_Numerical_MAINZ-only-Basalsreneg_ERBB_normal_.tsv ./ ../Results/Clusterig/MAINZ/Heatmaps/Basal_Only_ABCS/ Heatmap_MAINZ_Basal_ABC_transporters_Lehmann_clasification_ERBB_erneg_collapsed_medianerneg log2-transformation-no
 
 
-Rscript DGE_limma2.R ../Data/toyMETABRIC_Controls_LumA.txt ./ ../Results/DEG/METABRIC/ 0.6 0.05 METABRIC_toy_Normals_LumisA
+Subexpression_matrix_Basal_from_MAINZ_HCGS_er_neg_ERBB_normal_.tsv_only_ABC_transporters_genes.tsv
+
+
+../Results/Splited/Submatrices_ohne_controls/Subexpression_matrix_Basal_from_MAINZ_HCGS_collapsed_er_neg.tsv_only_ABC_transporters_genes.tsv
+#
 
 
 #grep -nr Breast ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix.txt ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_50_stbl_10_median_PDSz_ordered_matrix.txt ../Results/Pathifier/Basal/TCGA/TCGA_Basal_above_percentile_50_stbl_10_median_PDSz_ordered_matrix.txt ../Results/Pathifier/Basal/TCGA/TCGA_Basal_above_percentile_75_stbl_10_median_PDSz_ordered_matrix.txt 
