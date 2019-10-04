@@ -12,12 +12,12 @@ Rscript getting_MAINZ_DB.R ../Results/Splited/Submatrices_ohne_controls/ ../Resu
 ##############################
 Rscript Split_matrix_by_labels.R ../Data/expMatrix_TCGA_cBioPortal_no_males_withindicator.txt ../Data/Labels_Controls_and_Normal_separated_TCGA.txt  ../Results/Splited/Submatrices_ohne_controls/ TCGA
 
-Rscript Controls_pasted_with_Submatrices_generated_by_labels.R ../Data/expMatrix_TCGA_cBioPortal_no_males_withindicator.txt ../Data/Labels_Controls_and_Normal_separated_TCGA.txt  ../Results/Splited/SubMatrices_with_controls/ TCGA
+Rscript Controls_pasted_with_Submatrices_generated_by_labels.R ../Data/expMatrix_TCGA_cBioPortal_no_males_withindicator.txt ../Data/Labels_Controls_and_Normal_separated_TCGA.txt  ../Results/Splited/SubMatrices_with_controls/ TCGA # Generating submatrix of cases and controls (A)
 
 Rscript splitdf_by_gene_level_in_tumours_Command_Args.R ../Results/Splited/SubMatrices_with_controls/Control_with_subexpression_matrix_of_Basal_from_TCGA_.tsv  ABCB1 ../Results/Matrices_splited_by_gene/ABCB1/ TCGA_Basal 
 
 ####################################
-## Runing Pathifier
+## Runing Pathifier (B)
 ####################################
 ## Getting the updated KEGG database
 Rscript UptodateKEGG.R ../Results/KEGGDB/
@@ -40,7 +40,7 @@ new_names=${names%_.tsv}
 done;
 
 ####################################
-## DGE genes
+## DGE genes (C)
 ####################################
 ## only log 2 transformed
 
@@ -53,7 +53,7 @@ Rscript DESeq2_with_log2_transformed_data_only.R ../Results/Matrices_splited_by_
 Rscript DESeq2_with_log2_transformed_data_only.R ../Results/Matrices_splited_by_gene/ABCB1/TCGA_Basal_splited_by_the_expression_of_the_gene_ABCB1_25th_top_high.tsv ../Data/Labels_Controls_and_Normal_separated_TCGA.txt ./ ../Results/DEG/TCGA/log2only/ _DGE_TCGA_Basal_ABCB1_above_per75_only_log2transformed_of0_6_padjof0_05 0.6 0.05 7
 
 #########################################################
-## Big DF Pathway Target Drug Interaction LogFC  ########
+## Big DF Pathway Target Drug Interaction LogFC   (D) ###
 #########################################################
 
 Rscript DfPathways__and_PwDefinitions_and_dfDEG_2_Df_of_PwGenesDrugs.R ../Results/KEGGDB/KEGG_pathways_in_df_genesymbol.tsv ../Results/Pathifier/Basal/TCGA/TCGA_Basal_under_percentile_25_stbl_10_median_PDSz_ordered_matrix_Top20.txt ../Results/DEG/TCGA/log2only/padj10_3_lfc1_results_DESeq_DGE_TCGA_Basal_ABCB1_under_per25_only_log2transformed_lfc2_of0_6_padjof0_05.tsv ./ ../Results/BigDfPTD/TCGA/ TCGA_Basal_under_percentile_25_top20_DEG_log2only # top 20
