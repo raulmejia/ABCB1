@@ -1,5 +1,6 @@
 ########################################################################
-### This script Get the Differential expresed genes in RNAseq data #####
+## This script get a dataframe (describing phenotypes) and return the 
+## data frame with a "Triple negative column" added
 # Writed by Raúl Alejandro Mejía Pedroza                              ##
 ########################################################################
 #######   Data selected by te user #####################################
@@ -67,7 +68,6 @@ Exp_Mat_bk <- rbind(NORMAL , Exp_Mat_bk)
 positions <- which( rownames(MyLabels) %in% colnames(Exp_Mat_bk) )
 Adjusted_Labels <- data.frame(MyLabels[ positions,])
 rownames(Adjusted_Labels) <- rownames(MyLabels)[ positions]
-
 
 #######################################################################
 ############   Building the DDS DESeqDataSet      #####################
