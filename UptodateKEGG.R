@@ -28,8 +28,9 @@ if (!require("stringr")) {
 
 args <- commandArgs(trailingOnly = TRUE)
 results_path <- args[1]
-#results_path<-c("../../Results/") # You can set a different path to save your results
+results_path<-c("~/Documents/4Andre") # You can set a different path to save your results
 # WS # load(file="myworkspace.RData")
+results_path<-normalizePath(results_path)
 ################################################
 ####### Defining functions that will be used ###
 ################################################
@@ -64,7 +65,7 @@ kegg_gsets <-kegg.gsets(species = "hsa", id.type = "kegg") # Downloading the mos
 # WS #  kegg_gsets$kg.sets
 # WS # kegg_gsets$kg.sets[kegg_gsets$sig.idx]
 
-save( kegg_gsets,file=paste0(results_path,"uptdateKeggPathways.RData" ))
+save( kegg_gsets,file=paste0(results_path,"/","uptdateKeggPathways.RData" ))
 
 KEGG_pathways_in_df <-list_of_chr_to_df(kegg_gsets$kg.sets) # shaping the pathway's data into a data.frame (The genes are in KEGG ids)
 
@@ -86,10 +87,10 @@ KEGG_pathways_in_df_genesymbols <-list_of_chr_to_df( kegg_sets_kid_gs) # shaping
 #KEGG_pathways_in_df_genesymbols[1:5,1:5]
 #KEGG_pathways_in_df[1:5,1:5]
 
-write.table(KEGG_pathways_in_df_genesymbols, file=paste0(results_path,"KEGG_pathways_in_df_genesymbol.tsv") ,sep="\t",col.names = FALSE,quote = FALSE)
-write.table(KEGG_pathways_in_df, file=paste0(results_path,"KEGG_pathways_in_df_in_keggids.tsv") ,sep="\t",col.names = FALSE,quote = FALSE)
+write.table(KEGG_pathways_in_df_genesymbols, file=paste0(results_path,"/","KEGG_pathways_in_df_genesymbol.tsv") ,sep="\t",col.names = FALSE,quote = FALSE)
+write.table(KEGG_pathways_in_df, file=paste0(results_path,"/","KEGG_pathways_in_df_in_keggids.tsv") ,sep="\t",col.names = FALSE,quote = FALSE)
 
-save(KEGG_pathways_in_df_genesymbols,file=paste0(results_path,"KEGG_pathways_in_df_in_genesymbols.RData"))
-save(KEGG_pathways_in_df,file=paste0(results_path,"KEGG_pathways_in_df.RData"))
+save(KEGG_pathways_in_df_genesymbols,file=paste0(results_path,"/","KEGG_pathways_in_df_in_genesymbols.RData"))
+save(KEGG_pathways_in_df,file=paste0(results_path,"/","KEGG_pathways_in_df.RData"))
 
 # WS # save.image(file="myworkspace.RData")
