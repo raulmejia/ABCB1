@@ -21,15 +21,18 @@ if (!require("stringr")) {
   install.packages("stringr", ask =FALSE)
   library("stringr")
 }
-
+if (!require("utils")) {
+  install.packages("utils", ask =FALSE)
+  library("utils")
+}
 ##########################################
 #### Defining user  variables #######
 ##########################################
 
 args <- commandArgs(trailingOnly = TRUE)
 results_path <- args[1]
-#results_path<-c("~/Documents/4Andre") # You can set a different path to save your results
-# WS # load(file="myworkspace.RData")
+# results_path<-c("~/Documents/4Andre") # You can set a different path to save your results
+# choose.dir(default = "", caption = "Select folder")
 results_path<-normalizePath(results_path)
 ################################################
 ####### Defining functions that will be used ###
