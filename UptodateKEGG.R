@@ -1,4 +1,4 @@
-# This program receives a path folder results and retrieves KEGG data base
+# This program receives a folder's path and retrieves KEGG data base
 # in its more updated version in a tabular way and a R-object in both KEGG ids and
 # genesymbols
 #########################################
