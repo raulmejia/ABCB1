@@ -28,7 +28,7 @@ if (!require("stringr")) {
 
 args <- commandArgs(trailingOnly = TRUE)
 results_path <- args[1]
-results_path<-c("~/Documents/4Andre") # You can set a different path to save your results
+#results_path<-c("~/Documents/4Andre") # You can set a different path to save your results
 # WS # load(file="myworkspace.RData")
 results_path<-normalizePath(results_path)
 ################################################
