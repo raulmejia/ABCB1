@@ -4,7 +4,6 @@
 #########################################
 ##### Installing required libraries #####
 #########################################
-
 if (!require("BiocManager")) {
   install.packages("BiocManager", ask =FALSE)
   library(BiocManager)
